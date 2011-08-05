@@ -1,0 +1,103 @@
+%% This file is a portion of the source for Revised Edition 1.1 of
+%% Operating Systems and Middleware: Supporting Controlled
+%% Interaction, Copyright 2011 by Max Hailperin.  This work is
+%% licensed under the Creative Commons Attribution-ShareAlike 3.0
+%% Unported License. To view a copy of this license, visit
+%% http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to
+%% Creative Commons, 171 Second Street, Suite 300, San Francisco,
+%% California, 94105, USA.
+\documentclass[11pt]{book}
+\usepackage{alltt}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{graphicx}
+%\usepackage{chappg}
+\usepackage{makeidx}
+%\usepackage{graphs}
+\setlength{\unitlength}{1pt}
+%\usepackage{epsf}
+\usepackage{flafter}
+\raggedbottom
+\newcommand{\vocab}[1]{\index{#1}\emph{#1}}
+\newcommand{\vocabs}[1]{\index{#1}\emph{#1s}}
+\newcommand{\vocabes}[1]{\index{#1}\emph{#1es}}
+\newcommand{\vocabing}[1]{\index{#1}\emph{#1ing}}
+\newcommand{\vocabion}[1]{\index{#1}\emph{#1ion}}
+\newcommand{\vocabyies}[1]{\index{#1y}\emph{#1ies}}
+\newcommand{\foldvocab}[2]{\index{#1 #2}\index{#2, #1}\emph{#1 #2}}
+\newcommand{\foldvocabs}[2]{\index{#1 #2}\index{#2, #1}\emph{#1 #2s}}
+\newcommand{\foldvocabes}[2]{\index{#1 #2}\index{#2, #1}\emph{#1 #2es}}
+\newcommand{\foldvocabyies}[2]{\index{#1 #2y}\index{#2y, #1}\emph{#1 #2ies}}
+\newcommand{\vocabindex}[2]{\index{#2}\emph{#1}}
+\newcommand{\foldindex}[2]{\index{#1 #2}\index{#2, #1}}
+\hyphenation{Ravi-shankar}
+\title{Operating Systems and Middleware:\\Supporting Controlled Interaction}
+\author{Max Hailperin\\Gustavus Adolphus College}
+\date{Revised Edition 1.1\\\today}
+\makeindex
+\begin{document}
+\bibliographystyle{plain}
+\frontmatter
+\maketitle
+
+\clearpage\thispagestyle{empty}
+\noindent Copyright \copyright\ 2011 by Max Hailperin.
+\[\includegraphics{by-sa}\]
+This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+license, visit
+\[ \textit{http://creativecommons.org/licenses/by-sa/3.0/} \]
+or send a letter to Creative Commons, 171 Second Street,
+Suite 300, San Francisco, California, 94105, USA.
+
+\cleardoublepage\thispagestyle{empty}
+\vspace*{10em}\centerline{To my family}
+
+\tableofcontents
+
+\makeatletter
+\let\@oldmakeschapterhead\@makeschapterhead
+\def\@makeschapterhead#1{\addcontentsline{toc}{chapter}{#1}%
+  \@oldmakeschapterhead{#1}}
+\@definecounter{chapterenumi}
+\renewcommand\thechapterenumi{\thechapter.\@arabic\c@chapterenumi}
+% this will probably do the wrong thing if I ever label a part within
+% an exercise
+\newcommand\labelchapterenumi{\thechapterenumi}
+\def\chapterEnumerate{%
+  \ifnum \@enumdepth >0\@toodeep\else
+    \advance\@enumdepth\@ne
+    \edef\@enumctr{chapterenum\romannumeral\the\@enumdepth}%
+      \expandafter
+      \list
+        \csname label\@enumctr\endcsname
+        {\usecounter\@enumctr\def\makelabel##1{\hss\llap{##1}}}%
+  \fi}
+\let\endchapterEnumerate =\endlist
+\makeatother
+
+\include{preface}
+
+\mainmatter
+
+\include{intro}
+\include{threads}
+\include{scheduling}
+\include{synchronization}
+\include{transactions}
+\include{vm}
+\include{processes}
+\include{persistence}
+\include{networking}
+\include{distmid}
+\include{security}
+
+\appendix
+\include{stacks}
+
+\backmatter
+%\pagenumbering[Bib]{bychapter}
+\bibliography{os-book}
+\cleardoublepage
+%\pagenumbering[Idx]{bychapter}
+\printindex
+\end{document}
