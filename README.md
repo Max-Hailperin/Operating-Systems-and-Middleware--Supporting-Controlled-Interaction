@@ -7,6 +7,8 @@ whether by changing its contents or by porting it to some other
 format. Those who just want to read the book in its current form are
 likely to find it easier to obtain a ready-made PDF file from the web.
 
+## Recreating the PDF file
+
 Recreating the PDF file from these source files requires six steps:
 
     pdflatex os-book
@@ -15,6 +17,8 @@ Recreating the PDF file from these source files requires six steps:
     pdflatex os-book
     makeindex os-book
     pdflatex os-book
+
+## Descriptions of files
 
 The main file is os-book.tex.  All the other .tex files are included
 by it.  There is one .tex file for each chapter.  For example,
