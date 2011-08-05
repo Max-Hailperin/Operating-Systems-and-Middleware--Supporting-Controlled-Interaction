@@ -9,12 +9,12 @@ likely to find it easier to obtain a ready-made PDF file from the web.
 
 Recreating the PDF file from these source files requires six steps:
 
-   pdflatex os-book
-   bibtex os-book
-   pdflatex os-book
-   pdflatex os-book
-   makeindex os-book
-   pdflatex os-book
+    pdflatex os-book
+    bibtex os-book
+    pdflatex os-book
+    pdflatex os-book
+    makeindex os-book
+    pdflatex os-book
 
 The main file is os-book.tex.  All the other .tex files are included
 by it.  There is one .tex file for each chapter.  For example,
