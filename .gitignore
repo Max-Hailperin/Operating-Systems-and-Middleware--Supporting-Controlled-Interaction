@@ -1,0 +1,24 @@
+# Backup files from emacs #
+###########################
+*~
+
+# Auxiliary, log, and contents files from pdftex#
+#################################################
+*.aux
+*.log
+*.toc
+
+# Raw, log, and sorted index files (makeindex) #
+################################################
+*.idx
+*.ilg
+*.ind
+
+# Processed bibliography and log (bibtex) #
+###########################################
+*.bbl
+*.blg
+
+# The final pdf file of the book #
+##################################
+os-book.pdf
