@@ -1,11 +1,14 @@
 This directory contains the LaTeX source files for the textbook
 Operating Systems and Middleware: Supporting Controlled Interaction
-Revised Edition 1.1, Copyright 2011 by Max Hailperin.
+Revised Edition 1.1.1, Copyright 2011 by Max Hailperin.
 
 These files are intended for those who want to modify the book,
 whether by changing its contents or by porting it to some other
 format. Those who just want to read the book in its current form are
 likely to find it easier to obtain a ready-made PDF file from the web.
+
+More information about this book can be found at
+https://gustavus.edu/+max/os-book/
 
 ## Recreating the PDF file
 
