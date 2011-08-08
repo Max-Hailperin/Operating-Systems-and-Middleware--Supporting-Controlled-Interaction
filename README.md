@@ -8,7 +8,7 @@ format. Those who just want to read the book in its current form are
 likely to find it easier to obtain a ready-made PDF file from the web.
 
 More information about this book can be found at
-https://gustavus.edu/mcs/max/os-book/
+https://gustavus.edu/+max/os-book/
 
 ## Recreating the PDF file
 
