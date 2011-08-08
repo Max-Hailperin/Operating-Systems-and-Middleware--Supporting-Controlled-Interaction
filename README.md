@@ -7,6 +7,9 @@ whether by changing its contents or by porting it to some other
 format. Those who just want to read the book in its current form are
 likely to find it easier to obtain a ready-made PDF file from the web.
 
+More information about this book can be found by visiting
+https://gustavus.edu/mcs/max/os-book/
+
 ## Recreating the PDF file
 
 Recreating the PDF file from these source files requires six steps:
