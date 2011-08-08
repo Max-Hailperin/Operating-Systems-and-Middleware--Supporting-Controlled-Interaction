@@ -19,6 +19,10 @@
 *.bbl
 *.blg
 
+# Output file from hyperref #
+#############################
+*.out
+
 # The final pdf file of the book #
 ##################################
 os-book.pdf
