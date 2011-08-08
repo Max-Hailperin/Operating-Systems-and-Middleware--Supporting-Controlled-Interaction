@@ -220,19 +220,19 @@ elsewhere.
 \hline
 \bf Knowledge unit &\\
 \bf (italic indicates core units in CS2008)& \bf Chapter(s)\\\hline
-\it OS/OverviewOfOperatingSystems & 1\\
-\it OS/OperatingSystemPrinciples &  1, 7\\
-\it OS/Concurrency & 2, 4\\
-\it OS/SchedulingAndDispatch & 3\\
-\it OS/MemoryManagement & 6\\
-\it OS/SecurityAndProtection & 7, 11\\
-OS/FileSystems & 8\\
-\it NC/Introduction & 9\\
-\it NC/NetworkCommunication (partial coverage)& 9\\
-\it NC/NetworkSecurity  (partial coverage)& 9\\
-NC/WebOrganization (partial coverage) & 9\\
-NC/NetworkedApplications (partial coverage) & 10\\
-IM/TransactionProcessing & 5\\\hline
+\it OS/OverviewOfOperatingSystems & \ref{intro-chapter}\\
+\it OS/OperatingSystemPrinciples &  \ref{intro-chapter}, \ref{processes-chapter}\\
+\it OS/Concurrency & \ref{threads-chapter}, \ref{synchronization-chapter}\\
+\it OS/SchedulingAndDispatch & \ref{scheduling-chapter}\\
+\it OS/MemoryManagement & \ref{vm-chapter}\\
+\it OS/SecurityAndProtection & \ref{processes-chapter}, \ref{security-chapter}\\
+OS/FileSystems & \ref{persistence-chapter}\\
+\it NC/Introduction & \ref{networking-chapter}\\
+\it NC/NetworkCommunication (partial coverage)& \ref{networking-chapter}\\
+\it NC/NetworkSecurity  (partial coverage)& \ref{networking-chapter}\\
+NC/WebOrganization (partial coverage) & \ref{networking-chapter}\\
+NC/NetworkedApplications (partial coverage) & \ref{distmid-chapter}\\
+IM/TransactionProcessing & \ref{transactions-chapter}\\\hline
 \end{tabular}\]
 
 \section*{Your Feedback is Welcome}
@@ -284,7 +284,7 @@ earlier first edition commissioned
 additional resources from independent supplement authors,
 which may still be available through the publisher's web site
 and would largely still apply to this revised edition.
-The author's web site, \textit{http://gustavus.edu/+max/os-book/},
+The author's web site, \textit{\url{http://gustavus.edu/+max/os-book/}},
 contains at least the following materials:
 \begin{itemize}
 \item
@@ -309,11 +309,11 @@ the first edition; rather than being a thorough update, it is aimed at three nar
 \item Two focused areas received more substantial updates:
 \begin{itemize}
 \item The explanation of Linux's scheduler was completely replaced to correspond to the newer ``Completely Fair Scheduler'' (CFS), including its group scheduling feature.
-\item A new section, 4.9, was added on nonblocking synchronization.
+\item A new section, \ref{nonblocking-synchronization-section}, was added on nonblocking synchronization.
 \end{itemize}
 \end{itemize}
 
-In focusing on these limited goals, a key objective was to maintain as much compatibility with the first edition as possible.  Although page numbering changed, most other numbers stayed the same.  All new exercises and projects were added to the end of the corresponding lists for that reason.  The only newly added section, 4.9, is near the end of its chapter; thus, the only changed section number is that the old Section~4.9 (``Security and Synchronization'') became 4.10.  Only in Chapter 4 did any figure numbers change.
+In focusing on these limited goals, a key objective was to maintain as much compatibility with the first edition as possible.  Although page numbering changed, most other numbers stayed the same.  All new exercises and projects were added to the end of the corresponding lists for that reason.  The only newly added section, \ref{nonblocking-synchronization-section}, is near the end of its chapter; thus, the only changed section number is that the old Section~4.9 (``Security and Synchronization'') became \ref{synchronization-and-security-section}.  Only in Chapter \ref{synchronization-chapter} did any figure numbers change.
 
 It is my hope that others will join me in making further updates and improvements to the text.  I am releasing it under a Creative Commons license that allows not just free copying, but also the freedom to make modifications, so long as the modified version is released under the same terms.  In order to such modifications practical, I'm not just releasing the book in PDF form, but also as a collection of LaTeX source files that can be edited and then run through the \texttt{pdflatex} program (along with \texttt{bibtex} and \texttt{makeindex}).  The source file collection also includes PDF files of all artwork figures; Course Technology has released the rights to the artwork they contracted to have redrawn.
 
