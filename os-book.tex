@@ -1,4 +1,4 @@
-%% This file is a portion of the source for Revised Edition 1.1 of
+%% This file is a portion of the source for a Revised Edition of
 %% Operating Systems and Middleware: Supporting Controlled
 %% Interaction, Copyright 2011 by Max Hailperin.  This work is
 %% licensed under the Creative Commons Attribution-ShareAlike 3.0
@@ -6,6 +6,21 @@
 %% http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to
 %% Creative Commons, 171 Second Street, Suite 300, San Francisco,
 %% California, 94105, USA.
+\newif\iffancytitlepage
+%%
+%% The document can be printed with either a plain, text-only
+%% title page or a fancy, photo-adorned title page, depending
+%% on whether the following line contains \fancytitlepagetrue
+%% or \fancytitlepagefalse.  The photo substantially increases
+%% the size of the PDF and may be better suited for the cover
+%% of a hardcopy than for a document scrolled through on a
+%% computer screen.  On the other hand, it is pretty cool.
+%% For now, I'm leaving the default as \fancytitlepagefalse
+%% and distributing the PDF in that non-fancy style, but I've
+%% got all the machinery here for anyone who wants fanciness.
+%%
+\fancytitlepagefalse
+%%
 \documentclass[11pt]{book}
 \usepackage{alltt}
 \usepackage{enumitem}
@@ -17,6 +32,10 @@
 \setlength{\unitlength}{1pt}
 %\usepackage{epsf}
 \usepackage{flafter}
+\iffancytitlepage
+\usepackage{eso-pic}
+\usepackage{color}
+\fi
 \usepackage[pdftitle={Operating Systems and Middleware: Supporting Controlled Interaction},pdfauthor={Max Hailperin}]{hyperref}
 \urlstyle{rm}
 \usepackage{bookmark}
@@ -42,7 +61,27 @@
 \begin{document}
 \bibliographystyle{plain}
 \frontmatter
+\iffancytitlepage
+\AddToShipoutPicture*{\AtStockLowerLeft{\includegraphics[width=\paperwidth]{petra}}}
+\makeatletter
+\begin{titlepage}%
+\color[rgb]{1,1,1}
+\hspace*{-9em}\parbox{\textwidth}{\noindent\LARGE \@title\par
+\vspace*{3em}
+{\large
+ \lineskip .75em%
+ \noindent\begin{tabular}[t]{l}%
+ \@author
+ \end{tabular}\par%
+ \vskip 1.5em%
+ \noindent\begin{tabular}[t]{l}%
+ \@date
+ \end{tabular}\par}}%
+  \end{titlepage}%
+\makeatother
+\else
 \maketitle
+\fi
 
 \clearpage\thispagestyle{empty}
 \noindent Copyright \copyright\ 2011 by Max Hailperin.
@@ -52,6 +91,16 @@ license, visit
 \[ \textit{\url{http://creativecommons.org/licenses/by-sa/3.0/}} \]
 or send a letter to Creative Commons, 171 Second Street,
 Suite 300, San Francisco, California, 94105, USA.
+\iffancytitlepage
+\subsection*{About the Cover}
+The cover photo shows the treasury coming into view at the end of the \textit{siq}, or defile, leading to the ancient Nabatean city of Petra in present-day Jordan. The siq is a narrow, winding passage cut deep into the sandstone primarily by natural geological forces, though it was improved by the Nabateans.
+
+Petra was a thriving spice trading city. Its prosperity can be linked to several factors, including its location on important trade routes, its access to water through sophisticated hydraulic engineering, and its easily defensible character. The siq played an important role in the latter two aspects. Water conduits were built into the walls of the siq. Meanwhile, the floor of the siq was just wide enough for a single-file merchant caravan of camels, while remaining too narrow to serve as a route for attack.
+
+Operating systems and middleware provide a conducive environment for application programs to interact in a controlled manner, much as Petra must have served for spice merchants 2000 years ago. Access to communication and resources remain as important as then, but so does the provision of tightly controlled interfaces that ensure security.
+
+The photo is by Rhys Davenport, who released it under a \href{http://creativecommons.org/licenses/by/2.0/deed.en}{Creative Commons Attribution 2.0 Generic license}. The photo is available on the web at \textit{\url{http://www.flickr.com/photos/33122834@N06/3437495101/}}.
+\fi
 
 \cleardoublepage\thispagestyle{empty}
 \vspace*{10em}\centerline{To my family}

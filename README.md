@@ -53,6 +53,10 @@ license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send
 a letter to Creative Commons, 171 Second Street, Suite 300, San
 Francisco, California, 94105, USA.
 
+The file petra.pdf is a cover photo that can optionally be enabled
+by setting a flag in os-book.tex. The attribution for this photo
+is also included in os-book.tex.
+
 ## Version numbering convention
 
 See https://gustavus.edu/+max/os-book/version-numbering.html
