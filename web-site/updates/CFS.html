@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>Changes in the Linux Scheduler as of 2.6.23</TITLE>
+</head>
+<body>
+<H1>Changes in the Linux Scheduler as of 2.6.23</H1>
+
+<p>This web page is an update to the textbook <a
+href="../"><cite>Operating
+Systems and Middleware: Supporting Controlled Interaction</cite></a>
+by <a href="/+max/">Max Hailperin</a>.  Chapter 3 of that text concerns scheduling, and it
+includes a description of Linux's scheduler.  As the end-of-chapter
+notes indicate, that description was written when Linux was at version
+2.6.11.  The description remained accurate up through version 2.6.22.
+However, a major redesign of the scheduler is being incorporated into
+version 2.6.23.  At the time of this writing, version 2.6.23 is
+forthcoming; the information in this web page is based on the
+pre-release version 2.6.23-rc6-v21.</p>
+
+<p>As indicated in the book, Linux supports fixed-priority scheduling
+for real-time threads as well as the normal scheduler used for
+ordinary threads.  This remains true; the discussion here is only
+about how ordinary threads are scheduled.  The new scheduler for these
+threads is called CFS.</p>
+
+<p>At a very big-picture level, CFS still operates on the same
+principles as the previous Linux scheduler.  In particular, these two
+Linux schedulers are more similar to one another than either is to the
+decay-usage schedulers used in other Unix systems, such as Mac OS X.
+In CFS, as in the previous Linux scheduler, niceness is primarily a
+control over the proportion of CPU time that each thread receives.  In
+both Linux schedulers, this proportional distribution of CPU time is
+done not by adjusting priorities (as in decay-usage schedulers), but
+rather by a more direct measuring out of the run times.  As the book
+explains, the previous Linux scheduler did make some use of
+dynamically adjusted priorities, but only to control how soon waking
+threads ran, not as a way of achieving CPU sharing among runnable
+threads.  In CFS, new mechanisms are used both for metering out
+runtime and for ensuring that waking threads run
+soon.  However, these new mechanisms continue to be largely distinct,
+as in the prior Linux scheduler and unlike decay-usage schedulers.</p>
+
+<p>Before diving into the ways in which CFS differs from the previous
+Linux scheduler, let's consider a few oddities of the previous
+scheduler's behavior, which help motivate the redesign.  The following
+comments pertain to the previous scheduler, as described in the book:</p>
+
+<ul>
+<li><p> As the book explains, niceness control over proportional CPU
+sharing is achieved by assigning different sized time slices
+depending on the niceness level.  For example, a normal thread of
+niceness 0 receives a 100ms time slice while a maximimally nice thread
+(with niceness 19) receives a 5ms time slice.  This assures that if
+the two are runnable, the nice one will receive only 5/105
+of the CPU time.  However, this design has a peculiar side effect.
+Suppose that two threads are running with equal niceness levels.
+Clearly each will receive half the CPU time.  But what about the rate
+at which switching occurs?  With two niceness 0 threads, they will
+switch back and forth every 100ms, whereas with two niceness 19
+threads, they will switch back and forth every 5ms.  (You can
+experimentally verify this.)  Neither rate is necessarily an ideal
+tradeoff between throughput and response time; instead, they are
+accidental side-effects of the way the mixed-niceness case is handled.
+In fact, if any relationship between niceness and switching rate were
+desirable, it would be the reverse one.  High niceness threads tend to
+be long-running, computationally intensive ones with large memory
+footprints, where computational throughput is a much larger concern
+than response time.  As such, they would be the ones that would be
+good candidates for long time slices; giving them exceptionally short
+time slices even when no normal niceness threads are runnable is
+somewhat perverse.
+</p></li>
+
+<li><p>
+Another oddity concerns the specific relationship between niceness and
+time slice.  For concreteness, consider two CPU-bound threads that differ in niceness by one
+point.  How do they share the CPU?  The answer is, this depends on
+their absolute niceness levels, rather than only the one-point difference in
+niceness.  If the threads are niceness 0 and 1, they will have time
+slices of 100 and 95ms, and so receive nearly equal CPU shares.  If
+the threads are niceness 18 and 19, they will have time slices of 10
+and 5ms, and so one will receive twice the CPU time of the other.
+</p></li>
+
+<li><p>
+The system of prioritizing waking threads has the potential for an
+even bigger problem.  Recall from the book's description that a waking
+thread is placed into the active array at a position corresponding to
+its priority.  
+Moreover, runnable threads that have recently spent some time asleep can become eligible to
+be returned to the active array even when they start a new time slice,
+rather than moving to the expired array at that point.
+So long as the active array contains threads, no CPU
+time will be given to the threads in the expired array. 
+A steady stream of waking threads can delay for arbitrarily long the
+time when a runnable thread in the expired array receives service.
+Even with just a couple threads, it is possible to contrive their
+sleeping and waking behavior so as to delay a runnable
+thread's execution by multiple seconds, because of the 
+threads being given a new time slice but returned to the
+active array, rather than the expired array.</p></li>
+</ul>
+
+<p>The first two oddities could have been addressed through relatively
+minor changes to the prior scheduler.  Thus, although they were in
+fact addressed as part of the wholesale redesign, it is possible to
+describe their resolution without getting into the more fundamental
+aspects of CFS.  This description will retain its essential validity
+even after you come to understand CFS more deeply.</p>
+
+<p>Rather than assign each niceness level a time slice, CFS assigns
+each niceness level a <i>weight</i> and then calculates the time slices
+based on the weights of the runnable threads.  Each thread is given a
+time slice proportional to its weight divided by the total weight of
+the runnable threads.  CFS starts with a target time for how long it
+should take to make one complete round-robin through the runnable
+threads.  Suppose, for example, that the target is 100ms.  Then with
+two runnable threads of equal niceness, and hence equal weight, each
+thread will run for 50ms, independent of whether they both have
+niceness 0 or both have niceness 19.  With four equal-niceness
+threads, each would run 25ms.  Thus the switching rate is independent
+of the niceness level of the threads, unlike in the prior scheduler.</p>
+
+<p>Interestingly, the switching rate is now dependent on the overall
+system load.  This means that as a system using CFS becomes more
+loaded, it will tend to sacrifice some throughput in order to retain
+a desired level of responsiveness.  The level of responsiveness is
+controlled by the target time that a thread may wait between
+successive opportunities to run, which was 100ms in the preceding
+examples.  That value is settable by the system administrator.  The
+value of 100ms might be appropriate for a server where throughput is
+important and responsiveness is needed only on the scale of web page
+reloads, not graphical interactions.  The default configuration of CFS
+uses a value of 20ms, which is more appropriate for a desktop machine,
+where responsiveness is paramount.</p>
+
+<p>However, if system load becomes extremely high, CFS does not
+continue sacrificing throughput to response time.  This is because
+there is a lower bound on how little time each thread can receive.
+After that point is reached, adding additional threads will increase
+the total time to cycle through the threads, rather than continuing to
+reduce the per-thread time.</p>
+
+<p>Now consider a case where two threads share the CPU, one with
+niceness 0 and the other with niceness 5.  CFS assigns these niceness
+levels the weights of 1024 and 335 respectively.  The time that the
+threads get is therefore proportional to 1024/(1024+335) and
+335/(1024+335).  Because 1024 is roughly 3 times as large as 335, we
+can estimate that the thread with niceness 0 will receive
+approximately 75ms out of each 100ms (or 15ms out of each 20ms) and
+the thread with niceness 5 will receive approximately 25ms out of each
+100ms (or 5ms out of each 20ms).  The same result would be achieved if
+the threads had niceness 5 and 10 rather than 0 and 5, because the
+weights would then be 335 and 110, which are still in approximately a
+3-to-1 ratio.  More generally, the CPU proportion is determined only
+by the relative difference in nicenesses, rather than the absolute
+niceness levels, because the weights are arranged in a geometric
+progression.  (This is analogous to well-tempered musical scales, where a particular
+interval, such as a major fifth, has the same harmonic quality no
+matter where on the scale it is positioned, because the ratio of
+frequencies is the same.)</p>
+
+<p>Having seen this overview of how nicenesses control the allocation of
+processor time in CFS, we can now move into a discussion of the actual
+mechanism used to meter out the processor time, which replaces the
+prior mechanism of active and expired arrays.  Seeing the mechanism
+will then provide the background for resolving the final outstanding
+issue, which is how to prioritize waking threads without risking
+starving other runnable threads.  It should at least be plausible that a
+change in mechanism will make that goal possible, because the
+underlying problem was threads repeatedly re-entering the active array
+while others languished on the expired array.  Given that CFS
+eliminates the two arrays, you should be willing to believe that this
+problem goes away.</p>
+
+<p>The CFS scheduling mechanism is based around one big idea, with
+lots of smaller details that I will largely ignore.  The big idea is
+keeping track for each thread of how much total running it has done,
+measured in units that are scaled in accordance with the thread's
+weight.  That is, a niceness 0 thread is credited with 1ns of running
+for each nanosecond of time that elapses with the thread running, but
+a niceness 5 thread would be credited with approximately 3ns of
+running for each nanosecond it actually runs.  (More precisely, it
+would be credited with 1024/335 nanonseconds of running for each
+actual nanosecond.) Given this funny accounting of how much running
+the threads are doing (which is called <i>virtual runtime</i>), the goal of keeping the threads running in
+their proper proportion simply amounts to running whichever is the
+furthest behind.  However, if CFS always devoted the CPU to the thread that was furthest behind,
+it would be constantly switching back and forth between the threads.
+Instead, the scheduler sticks with the current thread until its
+timeslice runs out or it is preempted by a waking thread.
+Once the scheduler does choose a new thread, it picks the thread
+with minimum virtual runtime.  Thus, over the long haul, the virtual
+runtimes are kept approximately in balance, which means the actual
+runtimes are kept in the proportion specified by the threads'
+nicenesses (or more directly, by the threads' weights).</p>
+
+<p>This description of accumulating virtual runtime would work if all
+threads started when the system was first booted and stayed
+continuously runnable.  However, it needs a bit of
+enhancement to deal with threads being created or waking up from sleeps.
+If the scheduler didn't do anything special with them, they would get
+to run until they caught up with the pre-existing threads, which could
+be a ridiculous amount of runtime, to the detriment of the other
+threads.  So, when a thread is inserted into the runqueue, its virtual
+runtime is set to the minimum virtual runtime of any of the existing
+runnable threads, with a small adjustment (depending on whether it is
+a newly created thread or a waking sleeper).  That way, it will be prioritized to run, but will
+not get to run for an abnormally long time.</p>
+
+<p>The run queue is kept sorted by the runnable threads' virtual runtimes
+by storing it in a red-black tree, which is a variant of a
+binary search tree with the efficiency-enhancing property that no leaf
+can ever be more than twice as deep as any other leaf.
+When the CFS scheduler decides to switch threads, it switches to the leftmost thread in the
+red-black tree, that is, the one with the earliest virtual runtime.</p>
+
+<p>The scheduler performs these thread switches under two
+circumstances.  One is the expiration of a time slice.  The other is
+when a new thread enters the run queue, provided that the currently
+running thread hasn't just recently started running.  (There is a
+configurable lower limit on how quickly a thread can be preempted.)</p>
+
+<p>One of the advantages of positioning runnable threads on a timeline
+of virtual runtimes (represented as the red-black tree) is that it
+naturally prevents waking threads from starving other threads that
+have remained runnable, as was possible with the active and expired
+arrays.  As time marches on, threads that wake up get inserted into
+the timeline at later and later virtual runtimes.  A runnable thread that has been patiently
+waiting for the CPU, on the other hand, retains a fixed virtual runtime.
+As such, it will eventually have the lowest virtual runtime, and hence
+will be chosen to run (once a thread switch occurs).  No conspiracy of threads sleeping and waking up can
+deny it service beyond that point.</p>
+
+</body>
+</HTML>
