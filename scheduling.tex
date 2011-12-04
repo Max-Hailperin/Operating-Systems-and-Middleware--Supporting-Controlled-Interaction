@@ -524,7 +524,7 @@ each company to run multiple threads while still controlling the
 overall resource allocation among the companies, not just among the
 individual threads.
 
-Linux's scheduler provides a flexible group scheduling facility.  Threads can be treated individually or they can be placed into groups either by user or in any other way that the system administrator chooses. Up through version 2.6.37, the default was for threads to receive processor shares individually.  However, this default changed in version 2.6.38.  The new default is to automatically establish a group for each terminal window.  That way, no matter how many CPU-intensive threads are run from within a particular terminal window, they won't greatly degrade the system's overall performance.  (To be completely precise, the automatically created groups correspond not to terminal windows, but to groupings of processes known as sessions.  Normally each terminal window corresponds to a session, but there are also other ways sessions can come into existence.  Sessions are not explained further in this book.)
+Linux's scheduler provides a flexible \foldvocab{group}{scheduling} facility.  Threads can be treated individually or they can be placed into groups either by user or in any other way that the system administrator chooses. Up through version 2.6.37, the default was for threads to receive processor shares individually.  However, this default changed in version 2.6.38.  The new default is to automatically establish a group for each terminal window.  That way, no matter how many CPU-intensive threads are run from within a particular terminal window, they won't greatly degrade the system's overall performance.  (To be completely precise, the automatically created groups correspond not to terminal windows, but to groupings of processes known as sessions.  Normally each terminal window corresponds to a session, but there are also other ways sessions can come into existence.  Sessions are not explained further in this book.)
 
 Having learned about urgency, importance, and resource allocation,
 one important lesson is that without further clarification, you cannot
@@ -1766,9 +1766,12 @@ Suppose a Linux system is running three threads, each of which runs an
 infinite loop with nothing in the body, so that it just chews up as
 much processor time as it is given.  One thread is run by one user,
 whereas the other two threads are run by a second user (perhaps logged
-in over the network or in a second virtual console).  Does the
+in over the network or in a second terminal window).  Does the
 scheduler give each user a fair share (one-half) of the the
 processor's time, or does it give each thread a fair share (one-third)?
+The answer depends on whether the group scheduling feature is
+left in its default configuration or is disabled; you should
+provide an answer for each case.
 You can answer this question from the text of this chapter, but see
 also Exploration Project~\ref{linux-sharing-project}.
 Also, which behavior would you prefer?  Explain why.
@@ -1891,7 +1894,7 @@ A and B goes a second without processor time in the course of a day.
 \item\label{linux-sharing-project}
 Experimentally verify your answer to Exercise~\ref{linux-sharing-exercise} with the help of another user.  The
 {\tt top} command will show you what fraction of the processor each
-thread gets.  
+thread gets.  To disable the automatic group scheduling, boot the kernel with the \texttt{noautogroup} option.
 \item
 Experimentally measure the impact of \vocab{niceness} on the amount of
 processor time given to compute-bound threads under as many UNIX-like
@@ -1912,6 +1915,11 @@ software system context in which you did it, carefully enough that
 someone could replicate your results.  Try to draw some conclusions
 about the suitability of niceness as a resource allocation tool on the
 systems you studied.
+
+Note that in order to observe the impact of niceness under Linux, you need
+to run all the threads within a single scheduling group.  The simplest
+way to do that is to run all the threads from within a single terminal
+window.  Alternatively, you can boot the kernel with the \texttt{noautogroup} option.
 \item\label{threads-FIFO-project}
 The instructions for this project assume that you are using a Linux system; an
 analogous exploration may be possible on other systems, but the specific commands
