@@ -1657,7 +1657,10 @@ priority to a critical thread.
 Therefore, real operating systems guard the thread-control interfaces.
 Typically, only a user who has been authenticated as the ``owner'' of
 a particular thread or as a bona fide system administrator can control
-that thread's scheduling parameters.  Naturally, this relies upon
+that thread's scheduling parameters.
+(Generally the owner of a thread will be whatever user ran the program
+that created the thread.)
+Naturally, this relies upon
 other aspects of the system's security that I will consider in later
 chapters: the system must be protected from tampering, must be able to
 authenticate the identity of its users, and must be programmed in a
