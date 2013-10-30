@@ -1483,7 +1483,7 @@ First, consider a case where two threads have equal niceness, so the scheduler t
 sure that the two threads have run for equal amounts of time. After $x$
 nanoseconds have elapsed, each of the two threads should have run for $x/2$
 nanoseconds.  To make this always exactly true, the scheduler would need to
-keep switching back and for between the threads, which is inefficient.  Instead, the scheduler is willing to stick with one thread for a length of
+keep switching back and forth between the threads, which is inefficient.  Instead, the scheduler is willing to stick with one thread for a length of
 time, the time slice.  As a result, you might see that after 9~milliseconds,
 instead of each of the two threads having run for 4.5~milliseconds, maybe
 Thread~A has run for 6~milliseconds and Thread~B has run for 3~milliseconds,
