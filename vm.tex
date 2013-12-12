@@ -1259,7 +1259,7 @@ use it directly as the main page table, for mapping all pages, rather
 than only indirectly, for mapping the page table's pages?  To answer
 this, you need to recall that the MMU has a TLB in which it keeps track of
 recently used virtual-to-physical translations; repeated access to the
-same virtual page number don't require access to the page table.  Only
+same virtual page number doesn't require access to the page table.  Only
 when a new page number is accessed is the page table (of whatever
 kind) accessed.  This is true not only when translating the
 application's virtual address, but also when translating the virtual
