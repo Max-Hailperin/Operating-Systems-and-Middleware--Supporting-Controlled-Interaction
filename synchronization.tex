@@ -2131,7 +2131,7 @@ to lock mutex:
     if mutex.state = 1 then
       let mutex.state = 0
       unlock mutex.spinlock
-      let succesful = true
+      let successful = true
     else
       add current thread to mutex.waiters
       remove current thread from runnable threads
