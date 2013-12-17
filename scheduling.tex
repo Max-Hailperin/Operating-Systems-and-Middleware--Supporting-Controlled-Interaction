@@ -1168,7 +1168,7 @@ base priority.
 Microsoft Windows uses a variation on this theme.  Recall that a decay
 usage scheduler adjusts the priority downward from the base to reflect
 recent running and restores the priority back up toward the base
-when the thead waits.  Windows does the reverse: when a thread comes
+when the thread waits.  Windows does the reverse: when a thread comes
 out of a wait state, it is given an elevated priority, which then
 sinks back down toward the base priority as the thread runs.  The net
 effect is the same: a thread that has been waiting gets a higher
