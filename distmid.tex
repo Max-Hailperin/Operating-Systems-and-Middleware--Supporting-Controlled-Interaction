@@ -1175,7 +1175,7 @@ sure to correctly synchronize access to the list of subscribers.
 \item\label{Spawning-TopicServer-project}
 Exercise~\ref{BoundedBuffer-TopicServer-exercise} describes one way to
 modify the {\tt TopicServer} class so that the {\tt receive} method
-does not need wait for each subscriber's {\tt receive} method, at least
+does not need to wait for each subscriber's {\tt receive} method, at least
 under normal circumstances.  An alternative design to achieve that
 same goal would be for the {\tt TopicServer}'s {\tt receive} method to
 create a new thread for each incoming message.  The thread would deliver
