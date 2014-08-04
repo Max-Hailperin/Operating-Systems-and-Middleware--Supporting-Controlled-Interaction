@@ -841,7 +841,7 @@ both .NET and Java EE have support for web services.  As an example, let's
 look at \vocab{JAX-RPC} (\vocab{Java API for XML-Based RPC}), a component of
 Java EE.
 
-In Programming Project~\ref{jax-rpc-project}, you can use a JAX-RPC
+You can use a JAX-RPC
 tool to automatically translate the
 GoogleSearch WSDL file into a Java interface that contains
 ordinary Java-callable methods for each of the web service's
@@ -1241,31 +1241,21 @@ and also uses that same interface as the argument type for the {\tt
   addSubscriber} method.  Demonstrate how this allows one {\tt
   TopicServer} to function as a subscriber to another {\tt
   TopicServer}.  Assuming that you have done Programming Project \ref{registered-topics-project}, there is no need for the \texttt{TopicServer} that is functioning as a subscriber to add itself to the other one using \texttt{addSubscriber}.  Instead, you can leave the code for \texttt{TopicServer} unchanged and add a new program that looks up the two \texttt{TopicServer} objects in the registry and adds one as a subscriber to the other.
-\item\label{jax-rpc-project}
-Acquire an access control key for GoogleSearch from Google and
-download the software associated with the \textit{Java EE 7 Tutorial}.  After
-working through the JAX-RPC portion of the tutorial, modify one of the
-example clients so that it gets a spelling suggestion
-from GoogleSearch instead of accessing the example Hello web service.
-You can use \textit{\nolinkurl{http://api.google.com/search/beta2}} as the endpoint
-address and \textit{\nolinkurl{http://api.google.com/GoogleSearch.wsdl}} as the WSDL
-location.  Optionally, you can use a packet capture program such as
-{\tt wireshark} to verify that the web service is being accessed through
-ordinary HTTP, without the use of SSL, and that the SOAP messages are
-essentially as shown in Figures \ref{example-SOAP-request} and
-\ref{example-SOAP-response}.
 \end{chapterEnumerate}
 
 \section*{Exploration Projects}
 \begin{chapterEnumerate}
 \item
-Read about message-driven beans in the \textit{Java EE 7 Tutorial} and write a
+Read about message-driven beans in the \textit{Java EE Tutorial} and write a
 concise explanation of what they are and why they are more convenient
 than directly using JMS.
 \item
-Work through the examples in Chapters 28 and 33 of the
-\textit{Java EE 7 Tutorial}, ``A Message-Driven Bean Example'' and
-``The Java Message Service API.''
+Work through the examples in Pages ``Receiving Messages Asynchronously Using a Message-Driven Bean'' and
+``Using a Message Listener for Asynchronous Message Delivery'' of the \textit{Java EE Tutorial}. These are in chapter 64 as of Tutorial 7.
+Pages ``Receiving Messages Asynchronously Using a Message-Driven Bean'' and
+``Using a Message Listener for Asynchronous Message Delivery''
+\item
+Work through the JAX-WS portion of the \textit{Java EE Tutorial}.  
 \end{chapterEnumerate}
 
 
@@ -1273,7 +1263,7 @@ Work through the examples in Chapters 28 and 33 of the
 The topics in this chapter are subject to particularly rapid technical
 developments.  As such, your best source of information is likely to
 be the web sites.  The Java web site, \textit{\url{http://java.sun.com}}, has
-information both on RMI and on Java EE, which includes JMS and JAX-RPC.
+information both on RMI and on Java EE, which includes JMS, JAX-RPC, and JAX-WS.
 The Web Services Activity web site, \textit{\url{http://w3c.org/2002/ws/}}, has
 information on WSDL, SOAP, and web services in general.  Other
 important sites for web services standards are the Web Services
