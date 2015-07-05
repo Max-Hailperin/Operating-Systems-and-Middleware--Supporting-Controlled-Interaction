@@ -1486,12 +1486,12 @@ nanoseconds.  To make this always exactly true, the scheduler would need to
 keep switching back and forth between the threads, which is inefficient.  Instead, the scheduler is willing to stick with one thread for a length of
 time, the time slice.  As a result, you might see that after 9~milliseconds,
 instead of each of the two threads having run for 4.5~milliseconds, maybe
-Thread~A has run for 6~milliseconds and Thread~B has run for 3~milliseconds,
+thread~A has run for 6~milliseconds and thread~B has run for 3~milliseconds,
 as shown in Figure~\ref{equal-virtual-runtime-figure}.  When the scheduler decides which thread to run next, it
-will pick the one that has only run for 3~milliseconds, that is, Thread~B,
-so that it has a chance to catch up with Thread~A.  That way, if you check
-again later, you won't see Thread~A continuing to get further and further
-advantaged over Thread~B.  Instead, you will see the two threads taking
+will pick the one that has only run for 3~milliseconds, that is, thread~B,
+so that it has a chance to catch up with thread~A.  That way, if you check
+again later, you won't see thread~A continuing to get further and further
+advantaged over thread~B.  Instead, you will see the two threads taking
 turns for which one has run more, but with the difference between the two of
 them never being very large, perhaps 3~milliseconds at most, as this
 example suggests.
@@ -1519,35 +1519,35 @@ example suggests.
 \draw (-7,240) node{6};
 \draw (-3,240) -- (3,240);
 \end{tikzpicture}\]
-\caption{Because Thread A and Thread B both have niceness 0, each accumulates 1 millisecond of virtual
+\caption{Because thread A and thread B both have niceness 0, each accumulates 1 millisecond of virtual
 runtime for each elapsed millisecond during which it runs.  The bottom of this figure shows a Gantt
 chart indicating which thread is running at each point.  The top of the figure plots virtual runtime versus time
-for Thread A (solid) and Thread B (dashed). At the 9 millisecond point, the scheduler would choose
-Thread B to run next, because it has the lower virtual runtime.}\label{equal-virtual-runtime-figure}
+for thread A (solid) and thread B (dashed). At the 9 millisecond point, the scheduler would choose
+thread B to run next, because it has the lower virtual runtime.}\label{equal-virtual-runtime-figure}
 \end{figure}
 
 
 Now consider what happens when the two threads have different niceness.  For
-example, suppose Thread~A has niceness 0 and Thread~B has niceness 5.  To
+example, suppose thread~A has niceness 0 and thread~B has niceness 5.  To
 make the arithmetic easier, let us pretend that $1024/335$ is exactly 3, so
-that Thread~A should run exactly 3 times more than Thread~B.  Now, even if
+that thread~A should run exactly 3 times more than thread~B.  Now, even if
 the scheduler did not have to worry about the efficiency problems of
 switching between the threads, the ideal situation after 9~milliseconds
 would no longer be that each thread has run for 4.5 milliseconds.  Instead,
-the ideal would be for Thread~A to have run for 6.75 milliseconds and Thread~B
+the ideal would be for thread~A to have run for 6.75 milliseconds and thread~B
 for only 2.25 milliseconds.  But again, if the scheduler is only switching
 threads when discrete time slices expire, this ideal situation will not actually
-happen.  Instead, you may see that Thread~A has run for 6~milliseconds and
-Thread~B has run for 3~milliseconds, as shown in Figure~\ref{proportional-virtual-runtime-figure}.  Which one should run next?  We can no
-longer say that Thread~B is further behind and should be allowed to catch
-up.  In fact, Thread~B has run for longer than it ought to have.  (Remember,
+happen.  Instead, you may see that thread~A has run for 6~milliseconds and
+thread~B has run for 3~milliseconds, as shown in Figure~\ref{proportional-virtual-runtime-figure}.  Which one should run next?  We can no
+longer say that thread~B is further behind and should be allowed to catch
+up.  In fact, thread~B has run for longer than it ought to have.  (Remember,
 it really ought to have only run for 2.25 milliseconds.)  The way the
 scheduler figures this out is that it multiplies each thread's time by a
-scaling factor.  For Thread~A, that scaling factor is 1, whereas for Thread~B, it is 3.  Thus, although their actual runtimes are 6~milliseconds and
+scaling factor.  For thread~A, that scaling factor is 1, whereas for thread~B, it is 3.  Thus, although their actual runtimes are 6~milliseconds and
 3~milliseconds, their virtual runtimes are 6~milliseconds and 9~milliseconds.  Now, looking at these virtual runtimes, it is clear that
-Thread~A  is further behind (it has only 6 virtual milliseconds) and
-Thread~B is ahead (it has 9 virtual milliseconds).  Thus, the
-scheduler knows to choose Thread~A to run next.
+thread~A  is further behind (it has only 6 virtual milliseconds) and
+thread~B is ahead (it has 9 virtual milliseconds).  Thus, the
+scheduler knows to choose thread~A to run next.
 \begin{figure}
 \[\begin{tikzpicture}[scale=.03]
 \draw (0,0) rectangle (100,20);
@@ -1575,18 +1575,18 @@ scheduler knows to choose Thread~A to run next.
 \draw (-3,340) -- (3,340);
 \end{tikzpicture}\]
 \caption{Thread A still accumulates 1 millisecond of virtual
-runtime for each elapsed millisecond during which it runs, but Thread B accumulates virtual
+runtime for each elapsed millisecond during which it runs, but thread B accumulates virtual
 runtime at approximately 3 times as fast a rate, because it has niceness 5.  The bottom of this figure shows a Gantt
 chart indicating which thread is running at each point.  The top of the figure plots virtual runtime versus time
-for Thread A (solid) and Thread B (dashed). At the 9 millisecond point, the scheduler would choose
-Thread A to run next, because it has the lower virtual runtime, corresponding to the fact that it has
-only run twice as much as Thread B, rather than three times as much.
+for thread A (solid) and thread B (dashed). At the 9 millisecond point, the scheduler would choose
+thread A to run next, because it has the lower virtual runtime, corresponding to the fact that it has
+only run twice as much as thread B, rather than three times as much.
 (Assuming both threads remained runnable the whole time, the actual Linux CFS scheduler
 would not have given them equal time slices as shown here.  However, the accounting for
 virtual runtime works the same in any case.)}\label{proportional-virtual-runtime-figure}
 \end{figure}
 
-Notice that if Thread~A and Thread~B in this example were in their ideal
+Notice that if thread~A and thread~B in this example were in their ideal
 situation of having received 6.75 real milliseconds and 2.25 real milliseconds,
 then their virtual runtimes would be exactly tied.  Both threads would
 have run for 6.75 virtual milliseconds, once the scaling factors are taken into account.
@@ -1830,11 +1830,11 @@ As an alternative to the formula in part~(b), it has been incorrectly suggested 
 \end{enumerate}
 \item\label{WRR-WFQ-comparison-exercise}
 Section~\ref{proportional-share-scheduling-section} shows two Gantt charts for an example
-with three threads that are to share a processor in the proportion 3:2:1.  The first Gantt chart shows the three threads scheduled using WRR and the second using WFQ.  For each of the two Gantt charts, draw a corresponding graph with one line for each the three threads, showing that thread's accumulated virtual runtime (on the vertical axis) versus real time (on the horizontal axis).  Thread T1 should accumulate 2~milliseconds of virtual runtime for each millisecond that it actually runs.  Similarly, Thread T2 should accumulate 3~milliseconds of virtual runtime for each millisecond it runs and Thread T3 should accumulate 6~milliseconds for each millisecond it runs.  In both graphs, the three lines should all start at $(0,0)$ and end at $(30,30)$.  Look at how far the lines deviate from the diagonal connecting these two points.  Which scheduling approach keeps the lines closer to the diagonal?  This reflects how close each approach is coming to continuously metering out computation to the three threads at their respective rates.
+with three threads that are to share a processor in the proportion 3:2:1.  The first Gantt chart shows the three threads scheduled using WRR and the second using WFQ.  For each of the two Gantt charts, draw a corresponding graph with one line for each the three threads, showing that thread's accumulated virtual runtime (on the vertical axis) versus real time (on the horizontal axis).  Thread T1 should accumulate 2~milliseconds of virtual runtime for each millisecond that it actually runs.  Similarly, thread T2 should accumulate 3~milliseconds of virtual runtime for each millisecond it runs and thread T3 should accumulate 6~milliseconds for each millisecond it runs.  In both graphs, the three lines should all start at $(0,0)$ and end at $(30,30)$.  Look at how far the lines deviate from the diagonal connecting these two points.  Which scheduling approach keeps the lines closer to the diagonal?  This reflects how close each approach is coming to continuously metering out computation to the three threads at their respective rates.
 \item
 Draw a variant of Figure~\ref{proportional-virtual-runtime-figure} on page~\pageref{proportional-virtual-runtime-figure}
-based on the assumption that the scheduler devotes 4.5~milliseconds to Thread~A, then 1.5~milliseconds to Thread~B, and then
-another 3~milliseconds to Thread~A.  If the scheduler is again called upon to choose a thread at the 9~millisecond point,
+based on the assumption that the scheduler devotes 4.5~milliseconds to thread~A, then 1.5~milliseconds to thread~B, and then
+another 3~milliseconds to thread~A.  If the scheduler is again called upon to choose a thread at the 9~millisecond point,
 which will it choose?  Why?
 \end{chapterEnumerate}
 
