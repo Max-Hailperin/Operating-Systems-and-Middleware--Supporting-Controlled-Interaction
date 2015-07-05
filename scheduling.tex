@@ -1430,7 +1430,7 @@ causes the time per thread to stop shrinking once the number of runnable threads
 
 Now consider a case where two threads share the CPU, one with
 niceness 0 and the other with niceness 5.  CFS assigns these niceness
-levels the weights of 1024 and 335 respectively.  The time that the
+levels the weights of 1024 and 335, respectively.  The time that the
 threads get is therefore proportional to $1024/(1024+335)$ and
 $335/(1024+335)$.  Because 1024 is roughly 3 times as large as 335, we
 can estimate that the thread with niceness 0 will receive
@@ -1799,7 +1799,7 @@ to the point where it would start to repeat.  Are the deadlines met?
 \item\label{Gantt-SJF-exercise}
 Suppose a system has three threads (T1, T2, and T3) that are all
 available to run at time 0 and need one,
-two, and three seconds of processing respectively.  Suppose that each
+two, and three seconds of processing, respectively.  Suppose that each
 thread is run to completion before starting another. Draw six different
 Gantt charts, one for each possible order the threads can be run in.
 For each chart, compute the turnaround time of each thread; that is,
