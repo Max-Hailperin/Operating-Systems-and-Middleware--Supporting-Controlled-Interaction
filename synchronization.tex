@@ -2195,7 +2195,7 @@ while it holds the \texttt{TicketVendor}'s lock, all other threads that want to 
 
 Recall that the spinlocks introduced in Section~\ref{mutex-mechanisms-section} use atomic exchange instructions.  A thread that succeeds in changing a lock from the unlocked state to the locked state is guaranteed that no other thread did the same.  The successful thread is thereby granted permission to make progress, for example by vending a ticket. However, actually making progress and then releasing the lock are separate actions, not part of the atomic exchange.  As such, they might be delayed.  A nonblocking version of the \texttt{TicketVendor} requires a more powerful atomic instruction that can package the actual updating of the \texttt{TicketVendor} with the obtaining of permission.
 
-The \index{compare-and-set}compare-and-set instruction meets this need by doing the following two things atomically:
+The \vocab{compare-and-set} instruction meets this need by doing the following two things atomically:
 \begin{enumerate}
 \item The instruction determines whether a variable contains a specified value and reports the answer.
 \item The instruction sets the variable to a new value, but only if the answer to the preceding question was ``yes.''
