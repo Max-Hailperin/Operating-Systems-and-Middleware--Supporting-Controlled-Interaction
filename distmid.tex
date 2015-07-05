@@ -903,7 +903,7 @@ for browsing the web.  As such, the same cryptographic security
 mechanisms are used by interposing the Secure Sockets Layer, SSL,
 between HTTP and the underlying TCP connection.
 
-Just as with a secure web site, a secure web service identifies itself
+Just as with a secure website, a secure web service identifies itself
 by using a \vocab{certificate}, which is a document attesting to the
 server's identity and to the public half of the server's asymmetric
 key pair.  This public key can be used by the client to check the
@@ -919,13 +919,13 @@ The server's certificate allows the client to trust that it is
 communicating with the real server and not an impostor.  However, the
 server still has no idea which user identity to associate with the
 client.  Two options exist for solving that problem, one that
-continues to follow the lead of ordinary web sites used by humans and
+continues to follow the lead of ordinary websites used by humans and
 another that may be better suited to widespread deployment of web
 services.  I will present the solution first that you are probably
 familiar with from your own use of the web and then the more robust
 alternative.
 
-When you connect to a secure web site, your browser checks the
+When you connect to a secure website, your browser checks the
 server's certificate and if all is well signals this fact by showing
 you a locked padlock.  The server then typically asks you to enter a
 username and password for the site.  The strings that you enter are
@@ -1003,7 +1003,7 @@ to securely access any web service without prearrangement.
 
 To solve this problem, web services can use the
 \foldvocab{mutual}{authentication} feature of SSL, which is almost
-never used for ordinary human-oriented web sites.  In mutual
+never used for ordinary human-oriented websites.  In mutual
 authentication, both the client and the server have digitally-signed
 certificates obtained from trusted Certification Authorities.  They
 exchange these certificates in the initial setup handshake that starts
@@ -1259,9 +1259,9 @@ Work through the JAX-WS portion of the \textit{Java EE Tutorial}.
 \section*{Notes}
 The topics in this chapter are subject to particularly rapid technical
 developments.  As such, your best source of information is likely to
-be the web sites.  The Java web site, \textit{\url{http://java.sun.com}}, has
+be the websites.  The Java website, \textit{\url{http://java.sun.com}}, has
 information both on RMI and on Java EE, which includes JMS, JAX-RPC, and JAX-WS.
-The Web Services Activity web site, \textit{\url{http://w3c.org/2002/ws/}}, has
+The Web Services Activity website, \textit{\url{http://w3c.org/2002/ws/}}, has
 information on WSDL, SOAP, and web services in general.  Other
 important sites for web services standards are the Web Services
 Interoperability Organization, \textit{\url{http://www.ws-i.org/}}, and OASIS,
