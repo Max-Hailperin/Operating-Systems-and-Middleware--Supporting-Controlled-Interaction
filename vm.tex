@@ -2695,15 +2695,28 @@ where $n$ is the process's ID number.  Read the documentation for {\tt
   exist.)
 \item
 On a Linux or UNIX system, including Mac OS~X, you can find information about processes by
-using the \verb|ps| command.  To include all processes, you need to
-provide the option letters \verb|ax|.  If you give the letter \verb|l| as an
-option, you will receive additional columns of information about each
-process, including \verb|SIZE| or \verb|VSZ| (the virtual memory size)
-and \verb|RSS| (the resident set size, in physical memory).  Use the
-\verb|ps axl|
-command and note the sizes.  Presumably, the virtual size is always
-bigger than the resident set size.  If you calculate a ratio of the
-two sizes for each process, what range do the ratios span?  What is
+using the \verb|ps| command.  To include all processes, you can
+provide the option \verb|-A|.
+Other options allow you to specify the information obtained for each process.
+In particular, the command
+\begin{verbatim}
+ps -A -o rss= -o vsz=
+\end{verbatim}
+provides two columns of output, namely the resident set size (physical memory) and virtual size for each process.
+Presumably, the virtual size is always at least as large as
+the resident set size; the ratio of resident set size to virtual
+size is somewhere between 0 and 1.
+Using the general ability to pipe the output from one command into another,
+you can use the pipeline
+\begin{verbatim}
+ps -A -o rss= -o vsz= | awk '$2!=0 {printf "%f\n",$1/$2}' | sort -n
+\end{verbatim}
+to obtain a numerically sorted list of the ratios for all processes that have nonzero virtual sizes. If you want to do any further processing with this list, you can
+put it into a file like this:
+\begin{verbatim}
+ps -A -o rss= -o vsz= | awk '$2!=0 {printf "%f\n",$1/$2}' | sort -n > ratios
+\end{verbatim}
+Try this out on one or more systems. What range do the ratios span?  What is
 the median ratio?
 \item
 If you compile and run the C program in Figure~\ref{own-size-program} on a Linux or UNIX
