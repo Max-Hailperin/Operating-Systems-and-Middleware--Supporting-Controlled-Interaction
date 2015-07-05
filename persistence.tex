@@ -1636,7 +1636,7 @@ artificial best-case example.  However, even with realistic workloads,
 a significant speedup is possible.
 
 Several modern file systems use extent maps, including Microsoft
-Windows' NTFS, Mac OS~X's HFS Plus, and XFS, which was ported into
+Windows's NTFS, Mac OS~X's HFS Plus, and XFS, which was ported into
 Linux from SGI's IRIX version of UNIX.  For files that have only a
 handful of extents (by far the most common case), all three store the
 sequence of extent map entries in the inode or (in Windows and Mac
@@ -2416,7 +2416,7 @@ consistency repair process must be completed before returning the crashed system
 service.
 
 Contemporary file systems have almost all switched to the journaling
-strategy; examples include Linux's ext3fs, Microsoft Windows' NTFS,
+strategy; examples include Linux's ext3fs, Microsoft Windows's NTFS,
 and Mac OS~X's HFS Plus.  After rebooting from a crash, the system
 must still do a little work to undo and redo storage-block updates in
 accordance with the write-ahead log.  However, this is much faster, as
