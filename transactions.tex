@@ -680,7 +680,7 @@ aborts and does some extra writes at that time to undo the effect of
 earlier writes (as you will see in Section~\ref{failure-atomicity-subsection}),
 those undo writes must be explicitly listed in the history.  Note
 also that I am implicitly assuming the transactions have no effects
-other than on storage; in particular, they don't do any I/O.
+other than on storage; in particular, they don't do any other I/O.
 
 Let's look at some examples.  Suppose that $x$ and $y$ are two
 variables that are initially both equal to 5.
@@ -1719,7 +1719,7 @@ One final pitfall for unwary programmers, with possible security
 implications, is that a transaction manager can provide atomicity only 
 for those actions under its control.  For example, throughout this
 chapter, I have assumed that
-transactions don't do any I/O.  Mature, full-featured transaction
+transactions don't do any I/O aside from using storage devices.  Mature, full-featured transaction
 processing systems also allow controlled I/O from transactions.  Until
 a transaction commits, all its output is kept impounded.
 Only upon commit is the output actually produced.  (Some systems go so
