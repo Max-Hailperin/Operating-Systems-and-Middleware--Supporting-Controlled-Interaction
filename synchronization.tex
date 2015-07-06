@@ -2725,10 +2725,15 @@ public class Philosopher extends Thread{
 \end{figure}
 \begin{enumerate}
 \item
-Try the program out.  Depending on how fast your system is, you may
-need to change the number 100000.  The program should initially print out
-messages, at a rate that is not overwhelmingly fast, but
-that keeps you aware the program is running.  With any luck, after a
+Try the program out.
+Assuming you are running on a non-ancient computer
+and hence have multiple processor cores, you likely
+won't see any output at all: the threads deadlock
+before any of the philosophers has dined 100000 times.
+If you dramatically reduce the number 100000, say to 100,
+you are likely to see the program initially print out
+some messages, enough to
+keep you aware the program is running, and then after a
 while, the messages should stop entirely.  This is your sign that the
 threads have deadlocked.  What is your experience?  Does the program
 deadlock on your system?  Does it do so consistently if you run the
@@ -2737,7 +2742,31 @@ variability) and the circumstances under which you observed it.  If
 you have more than one system available that runs Java, you might want
 to compare them.
 \item
-You can guarantee the program won't deadlock by making one of the
+Optionally, you could try limiting the program to run on only one core. It will likely
+take much longer to deadlock because the threads are interleaved
+only at the coarse granularity of the scheduler's thread switching, rather than the
+fine granularity of the hardware's instruction execution.
+If you are using Linux,
+Exploration
+Project~\ref{threads-FIFO-project} on page~\pageref{threads-FIFO-project}
+explains how you can limit the program to a single core.
+If you are using Windows you can achieve a similar result using
+the \texttt{start} command with the \texttt{/affinity} flag; details
+are available on the web. For OS X, the only option unless you
+have installed the developer tools is to reboot the entire system
+with just one cpu enabled. You can do that by giving the following command
+before rebooting:
+\begin{verbatim}
+sudo nvram boot-args="cpus=1"
+\end{verbatim}
+To return to normal operation, give the command
+\begin{verbatim}
+sudo nvram boot-args=""
+\end{verbatim}
+and reboot again.
+\item
+You can guarantee the program won't deadlock (even on multiple cores)
+by making one of the
 threads (such as number 0) acquire its right fork before its left fork.
 Explain why this prevents deadlock, and try it out.
 Does the program now continue printing messages as long as you let it
