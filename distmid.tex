@@ -44,7 +44,7 @@ the application program as a normal procedure call and return.
 After presenting each of these styles of communication, I turn in
 Section~\ref{web-services-section} to their connection with web
 services.  Web services use standardized communication mechanisms to
-make programmed functionality available over the Internet.  Most web
+make programmed functionality available over the Internet.  Many web
 services fit the RPC model, though they can also use one-way messaging
 or (in theory) more general message exchange patterns.
 
@@ -221,9 +221,7 @@ freeing it from that responsibility.
 Section~\ref{RPC-generalities-section} explains further the
 principles upon which RPC operates.  Section~\ref{RMI-example-section}
 provides a concrete example of using RPC in the particular form of
-Java RMI (Remote Method Invocation).  The subsequent section,
-\ref{web-services-section}, is devoted to web services but also
-provides additional information on how RPC plays out in that context.
+Java RMI (Remote Method Invocation).
 
 \subsection{Principles of Operation for RPC}\label{RPC-generalities-section}
 
@@ -369,8 +367,6 @@ passed as references. This example illustrates the way in which an
 application programmer uses RMI and thereby complements the preceding
 general discussion of how RPC stubs and skeletons work.  I do not
 provide any more detailed information on the inner workings of RMI.
-However, in Section~\ref{web-services-section}, I show the how RPC
-messages are formatted in the web services environment.
 
 \subsection{An Example Using Java RMI}\label{RMI-example-section}
 
@@ -647,8 +643,7 @@ system in order to successfully test the sample code or complete
 the programming projects.  Once you get over these technical hurdles,
 however, you will be able to communicate among multiple machines, so
 long as they are all running Java and so long as no network firewalls
-impede communication among them.  In the following section, you will
-see how web services provide an alternate RPC mechanism
+impede communication among them.  Web services provide an alternate RPC mechanism
 that can allow communication between an even wider assortment of machines.
 
 \section{Web Services}\label{web-services-section}
@@ -660,221 +655,7 @@ services to take advantage of the web's popularity, hopefully making
 communication between programmed components as ubiquitous as the
 communication with humans facilitated by the web.
 
-The web services standards are based on \vocab{XML} (\vocab{Extensible Markup
-Language}), a form of structured
-textual document.  All XML documents have nested components with
-explicitly indicated types and attributes.  The specific kinds of
-nested components depend on the XML application.  For example, where
-XML is used for request messages, the component parts indicate what
-operation is being invoked and what arguments are being supplied to
-it.  By contrast, where XML is used not to invoke an operation but to
-define an interface, the component parts enumerate what the
-interface's operations are, what kinds of messages should be exchanged
-to invoke those operations, and so forth.
-
-Web service interfaces are described using an XML notation known as
-\vocab{WSDL} (\vocab{Web Services Description Language}).  This notation is rather
-verbose and is not usually read or written by humans.  Instead,
-the humans normally use user-friendly tools to process the WSDL, which
-serves as a common interchange format accepted by all the tools.
-However, you can get a feel for WSDL by looking at the excerpts shown
-in Figure~\ref{example-WSDL-excerpt}.
-\begin{figure}
-\begin{verbatim}
-<message name="doSpellingSuggestion">
-  <part name="key"            type="xsd:string"/>
-  <part name="phrase"         type="xsd:string"/>
-</message>
-
-<message name="doSpellingSuggestionResponse">
-  <part name="return"         type="xsd:string"/>
-</message>
-
-<operation name="doSpellingSuggestion">
-  <input message="typens:doSpellingSuggestion"/>
-  <output message="typens:doSpellingSuggestionResponse"/>
-</operation>
-\end{verbatim}
-\caption{These excerpts from the WSDL definition of the GoogleSearch API
-  show the two messages used to ask for and receive a spelling
-  suggestion and the operation that combines those two messages.}\label{example-WSDL-excerpt}
-\end{figure}
-The GoogleSearch API, from
-which these are taken, provides operations for searching for web
-pages.  However, it also provides an operation for suggesting spelling
-corrections, as shown here.  The operation involves two message types,
-one for request messages and one for response messages.  Request
-messages contain two string arguments; one is an access control key
-that Google demands so as to limit use of their
-service, and the other is the phrase to correct.  The response message
-contains just the returned value, a string containing the suggested
-correction.
-
-Notice that in Figure~\ref{example-WSDL-excerpt}, the \verb|doSpellingSuggestion|
-operation is explicitly specified as using an input request message
-and an output response message.  Because WSDL provides this detailed
-specification of how operations exchange messages, it can be used for
-patterns of communication other than RPC.  The most common usage is
-for RPC, as with the GoogleSearch API.  However, an operation can have
-only an input message, in which case the web service fits the
-messaging model instead of the RPC model.  In theory, an operation
-could also specify a more extended message exchange pattern, with
-multiple input and output messages; however, I am unaware of any use of
-this feature.
-
-The WSDL standard allows providers of web services to make their
-interfaces known to potential users without concern for what
-programming language or implementation technology they use.  For
-example, I cannot tell from the WSDL excerpted in
-Figure~\ref{example-WSDL-excerpt} whether Google is using
-Java EE, Microsoft's .NET, or some other technology.  I am free to use
-whichever I choose in writing my client.
-
-For this goal of interoperability to be realized, the service
-providers and users need to agree on more than just WSDL as a means of
-specifying interfaces.  They also need to agree upon the specific
-format for transmitting the request and response messages.  For this
-purpose, web services use a second XML format, known as \vocab{SOAP}.
-(SOAP once stood for Simple Object Access Protocol but no longer does.)
-Each SOAP document is a
-message and should match one of the message descriptions from the
-WSDL interface description.  For example, you saw WSDL message
-descriptions for the two message types \verb|doSpellingSuggestion| and
-\verb|doSpellingSuggestionResponse|.  Figures
-\ref{example-SOAP-request} and \ref{example-SOAP-response} show
-specific SOAP messages that fit these two descriptions.  The first one
-is a message asking for suggestions as to how ``middlewear'' should
-really be spelled, and the second is a message responding with the
-suggestion of ``middleware.''
-\begin{figure}
-\begin{alltt}
-<?xml version="1.0" encoding="UTF-8"?>
-<env:Envelope
- xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
- xmlns:xsd="http://www.w3.org/2001/XMLSchema"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/"
- xmlns:ns0="urn:GoogleSearch"
- env:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <env:Body>
-    <ns0:doSpellingSuggestion>
-      <key xsi:type="xsd:string">\textrm{\textit{GoogleAccessControlKeyHere}}</key>
-      <phrase xsi:type="xsd:string">middlewear</phrase>
-    </ns0:doSpellingSuggestion>
-  </env:Body>
-</env:Envelope>
-\end{alltt}
-\caption{This example SOAP message asks Google for spelling suggestions
-on the string {\tt middlewear}. This message has been broken into indented lines
-for legibility and has a place-holder where a real message would contain an
-access-control key issued by Google, which I am not allowed to divulge.}\label{example-SOAP-request}
-\end{figure}
-\begin{figure}
-\begin{verbatim}
-<?xml version='1.0' encoding='UTF-8'?>
-<SOAP-ENV:Envelope
- xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
- xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
- xmlns:xsd="http://www.w3.org/1999/XMLSchema">
-  <SOAP-ENV:Body>
-    <ns1:doSpellingSuggestionResponse
-     xmlns:ns1="urn:GoogleSearch"
-     SOAP-ENV:encodingStyle=
-       "http://schemas.xmlsoap.org/soap/encoding/">
-      <return xsi:type="xsd:string">middleware</return>
-    </ns1:doSpellingSuggestionResponse>
-  </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-\end{verbatim}
-\caption{This example SOAP message returns {\tt middleware} as a spelling suggestion
-in response to {\tt middlewear}. (Line breaks and indentation changed
-for legibility.)}\label{example-SOAP-response}
-\end{figure}
-
-Some transport mechanism needs to underlie SOAP.  That mechanism delivers the
-string of bytes shown in Figure~\ref{example-SOAP-request} to the
-server and then deliver the bytes shown in
-Figure~\ref{example-SOAP-response} back to the client.  The most
-common transport mechanism for SOAP is HTTP, the application-layer
-protocol normally used to access web pages.  Notice that in web
-services terminology, HTTP is referred to as a transport, because it
-conveys the SOAP messages, whereas in traditional networking
-terminology, the transport layer is one layer lower, where TCP
-operates.  In effect, web services are building a
-super-application-layer on top of the application layer, thereby
-treating the HTTP application layer as though it were only a transport
-layer.  As mentioned in Chapter~\ref{networking-chapter}, one
-advantage of this arrangement is that it circumvents obstacles such as
-firewalls that stand in the way of deploying new application-layer
-protocols.  Almost any Internet connection is open to HTTP traffic.
-
-When HTTP is used for a request-response message pair, as in the
-spelling suggestion example, the client opens a connection to the
-server exactly as it would to an ordinary web server, providing a URL
-that represents the particular web service, known as an
-\vocab{endpoint address}.  The client then sends the
-SOAP request message as the body of a POST method, the kind of HTTP
-transaction more traditionally used for filled-in forms.  The server
-sends the SOAP response message in the body of its HTTP response.
-
-Although SOAP is most commonly used with HTTP, the web services
-architecture is intentionally neutral with regard to transport.  SOAP
-messages can equally well be sent as the bodies of email messages,
-using SMTP, or as messages in a reliable message-queuing system, such
-as WebSphere MQ.
-
-If you remember that the goal of communication middleware is to ease
-application programmers' burdens, it should be obvious that SOAP and
-WSDL are not intended to be used without the aid of automated tools.
-You could, in principle, read the GoogleSearch API's WSDL specification
-yourself and based on it write code that sent the SOAP message
-shown in \ref{example-SOAP-request} over HTTP.  You could do this by using nothing more than
-the ability to open up a TCP socket and send bytes through it. Then
-you could read in from the socket the bytes constituting
-Figure~\ref{example-SOAP-response}'s response and arduously extract
-from it the spelling suggestion being returned.  However, this would
-be making a distributed system harder to construct, not easier.
-
-Luckily, there are a variety of language-specific and vendor-specific
-tools that make web services much easier to construct.  In particular,
-both .NET and Java EE have support for web services.  As an example, let's
-look at \vocab{JAX-RPC} (\vocab{Java API for XML-Based RPC}), a component of
-Java EE.
-
-You can use a JAX-RPC
-tool to automatically translate the
-GoogleSearch WSDL file into a Java interface that contains
-ordinary Java-callable methods for each of the web service's
-operations.  For example, it contains
-\begin{verbatim}
-public String doSpellingSuggestion(String key, String phrase);
-\end{verbatim}
-Using this, you can set a variable to the suggested spelling with
-just this code:
-\begin{alltt}
-suggestion = aGoogleSearch.doSpellingSuggestion(
-                           "\textrm{\textit{GoogleAccessControlKeyHere}}",
-                           "middlewear");
-\end{alltt}
-The Java object named \verb|aGoogleSearch| is a stub proxy
-implementing the interface created from the WSDL file; a few prior
-lines of code would set it up.  This proxy
-takes care of generating the big, messy SOAP request message,
-sending it, reading in the response, and picking the suggestion out
-from amid all its SOAP wrappings.  You, the application programmer,
-don't need to do any of that.
-
-The WSDL and SOAP facilities described thus far provide the core
-facilities for web services, but there are many other standards, and
-proposed standards, for less central aspects.  The entire area is in
-considerable flux with many competing draft standards.
-However, one other standard is approximately as solid as
-WSDL and SOAP are.  That standard, \vocab{UDDI} (\vocab{Universal Description, Discovery,
-and Integration}), provides a way for web service
-providers to list their services in a registry and for potential
-users to discover them by looking in the registry for services
-matching a description.  UDDI registries are themselves web services,
-accessed via SOAP messages in accordance with a WSDL specification.
+The first edition of this textbook provided information about web services standards, including an example of their use. However, this information became so badly outdated that I have removed it from this open-source version of the book. This section remains as a place-holder until such time as someone contributes an up-to-date treatment of the topic.
 
 \section{Security and Communication
   Middleware}\label{distmid-security-section}
@@ -894,177 +675,7 @@ this still leaves open one of the most difficult aspects of security
 in a distributed system.  Namely, how should a server know which
 user's access rights apply for each incoming connection?  Any robust
 solution to this problem relies on the cryptographic mechanisms
-described in Section~\ref{network-security-section}.  I can illustrate
-this using an example from web services.
-
-Recall that the exchange of SOAP messages between a client and web
-service normally takes place using the same HTTP protocol as is used
-for browsing the web.  As such, the same cryptographic security
-mechanisms are used by interposing the Secure Sockets Layer, SSL,
-between HTTP and the underlying TCP connection.
-
-Just as with a secure website, a secure web service identifies itself
-by using a \vocab{certificate}, which is a document attesting to the
-server's identity and to the public half of the server's asymmetric
-key pair.  This public key can be used by the client to check the
-server's digitally signed
-messages and also to send the server a secret key for
-confidential communication.  The certificate itself is digitally
-signed by some trusted \vocab{Certification Authority} (\vocab{CA}),
-an organization that has made its public key well known and that can be
-counted on to check out the legitimacy of another organization's or
-individual's identity claim before issuing a certificate.
-
-The server's certificate allows the client to trust that it is
-communicating with the real server and not an impostor.  However, the
-server still has no idea which user identity to associate with the
-client.  Two options exist for solving that problem, one that
-continues to follow the lead of ordinary websites used by humans and
-another that may be better suited to widespread deployment of web
-services.  I will present the solution first that you are probably
-familiar with from your own use of the web and then the more robust
-alternative.
-
-When you connect to a secure website, your browser checks the
-server's certificate and if all is well signals this fact by showing
-you a locked padlock.  The server then typically asks you to enter a
-username and password for the site.  The strings that you enter are
-sent over the SSL-encrypted communication channel and so are not
-subject to eavesdropping or tampering in transit.  Moreover, because
-your browser checked the server's certificate, you can be sure you
-aren't sending your password to a con artist.  The server gets the
-strings in decrypted form and checks them against its user database.
-This style of authentication relies on you and the site having a
-shared secret, the password.  In general, each client/server pair
-requires a shared secret established in advance.
-
-This first style of client authentication, which is provided by HTTP
-under the name \vocab{basic authentication}, can be a workable method for web
-services that are not widely deployed, especially for those that are
-deployed only internally to an enterprise.  In that context, the
-various web services will ordinarily be controlled by the same
-administrators and as such can all share a common authentication
-server that keeps track of users
-with their passwords.  Thus, a secret password needs to be established
-for each user, but not for each user/service pair.  Even across
-enterprise boundaries, basic authentication may suffice for web
-services that have only a small number of users, such as a web service
-used to facilitate one particular relationship between a pair of
-enterprises.
-
-Before I move on to the more sophisticated alternative, it is worth
-contrasting the first alternative, basic authentication using SSL,
-with weaker password-based authentication.  Consider, for example, the
-GoogleSearch API's spelling suggestion operation, which was shown in
-Section~\ref{web-services-section}.  This operation takes a secret
-access-control key as an argument in the request message itself.  The
-access-control key is issued by Google and essentially acts as a
-combination of username and password in a single string.  However, the
-GoogleSearch web service does not use SSL; it uses ordinary unencrypted
-HTTP directly over TCP.  One consequence is that the access control
-keys are subject to eavesdropping and so could be captured and then
-reused.  However, there is a second way in which a malefactor could
-capture a key.
-
-Recall that with SSL, the client program receives a certificate of the
-server's identity, protecting it against impostors.  Because
-GoogleSearch is not using SSL, you could be sending your misspellings
-to an impostor, perhaps someone who wants to embarrass you.  Moreover,
-because you send your key along, you could also be sending your key to
-an impostor.  This helps explain the significance of SSL's server
-authentication.  It not only protects the client from rogue servers,
-but also protects the server from misuse through password capture.
-Even if you don't care whether your misspellings become public
-knowledge, Google presumably cares that their service isn't used
-indiscriminately.  Otherwise they would not have established
-access-control keys.
-
-What can you conclude, then, about Google's security design?
-Presumably they decided that their service was valuable enough to make
-some attempt to discourage casual misuse, but not so valuable that
-they were willing to pay the price of SSL cryptography to keep
-determined adversaries away.  Also, their main concern is not with the
-actual identity of the user, but with limiting the number of searches
-made by any one user.  If someone captures your GoogleSearch key, they
-will simply share your daily limit on searches, not imposing any extra
-burden on Google.  Thus, Google's design stems from a well thought-out
-cost-benefit analysis, paradigmatic of how security decisions ought to
-be made.  They did not make a mistake in using passwords without SSL.
-However, you would be making a mistake to blindly emulate their
-security mechanism on a web service of greater value.
-
-Let us return, then, to security mechanisms suitable for high-value
-targets that are likely to attract serious attackers.  Recall that the problem
-with using HTTP's basic authentication over SSL is that it requires a
-shared secret password for each pair of client and server.  If web
-services are to form a ubiquitous Internet-wide economy, as some
-prognosticators suggest, this will not be workable.  Any client must be able
-to securely access any web service without prearrangement.
-
-To solve this problem, web services can use the
-\foldvocab{mutual}{authentication} feature of SSL, which is almost
-never used for ordinary human-oriented websites.  In mutual
-authentication, both the client and the server have digitally-signed
-certificates obtained from trusted Certification Authorities.  They
-exchange these certificates in the initial setup handshake that starts
-an SSL connection.  Thus, without needing any usernames or passwords,
-each knows the identity of its communication partner for the entire
-duration of the connection.  Mutual authentication is impractical for
-ordinary consumer-oriented web browsing, because merchants don't want
-to require all their customers to go to the trouble and expense of
-getting certificates.  However, for the business-to-business
-communications where web services are expected to play their major
-role, mutual authentication seems well suited.  It does, however,
-still have limitations, as I explain next.
-
-The use of SSL, sometimes with mutual authentication, is widely
-deployed in practical web service applications.  It also is
-incorporated in the most mature standards for web services; the Web
-Services Interoperability Organization's Basic Profile specifies that
-web service instances may require the use of HTTP over SSL and, in
-particular, may require mutual authentication.  However, this approach to
-web service security has a fundamental limitation, with the result
-that more sophisticated, less mature standards take a different approach.
-The fundamental limitation is that SSL secures communication channels,
-rather than securing the SOAP messages sent across those channels.
-
-To understand the difference between securing a channel and securing a
-message, consider the fact that several SOAP messages, originated by
-different users running different applications, may be sent across a
-single network connection.  Consider also the fact that a single SOAP
-message may be relayed through a whole succession of network
-connections on its way from its originator to its ultimate
-destination.  In both cases, SSL allows each computer to be sure of
-the authenticity of the neighboring computer, but it doesn't provide
-any direct support for associating the SOAP message with its author.
-
-Therefore, the Web Services Security standard provides a mechanism
-whereby the XML format of a SOAP message can directly contain a
-digital signature for the message.  Standards also govern the
-transmission of XML in encrypted form and the use of XML to send
-certificates.  Using these mechanisms, the Web Services
-Interoperability Organization's Basic Security Profile, currently only
-a working draft, provides requirements for SOAP messages to be
-encrypted and digitally signed.  Because the signature is on the
-message itself, it can be forwarded along with the message through
-relay channels and has sufficient specificity to allow messages of
-varying origins to share a network connection.
-
-One final advantage of the Web Services Security approach compared
-with SSL is that SOAP messages that have been digitally signed support
-non-repudiation, as described in
-Section~\ref{network-security-section}.  That is, because the
-recipient is in no better position to forge a message than anyone else
-would be, the recipient can present the message to a third party with
-a convincing argument that it came from the apparent sender.  Today,
-web services are largely used within organizations and between close
-business partners with a high degree of mutual trust.  However, as web
-services spread into more arm's-length dealings between parties that
-have no established relationship, non-repudiation will become more
-important.  Moreover, even if the communicating enterprises have a
-trust relationship, individual employees may be corrupt; digital
-signatures limit the scope of investigation that is needed if
-tampering is suspected.
+described in Section~\ref{network-security-section}.
 
 \section*{Exercises}
 \begin{chapterEnumerate}
@@ -1122,42 +733,6 @@ area and sending each in turn to the subscribers.  What
 Java class from Chapter~\ref{synchronization-chapter} would be appropriate to use
 for the holding area?  Describe the pattern of synchronization provided by
 that class in terms that are specific to this particular application.
-\item
-The text shown in Figure~\ref{bogus-SOAP-request} has the right form
-to be a legal SOAP message, but it would not be legitimate to send
-this message to the GoogleSearch web service.  Why not?
-\begin{figure}
-\begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<env:Envelope
- xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
- xmlns:xsd="http://www.w3.org/2001/XMLSchema"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/"
- xmlns:ns0="urn:GoogleSearch"
- env:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <env:Body>
-    <ns0:doSpellingSuggestion>
-      <key xsi:type="xsd:int">314159</key>
-      <phrase xsi:type="xsd:string">middlewear</phrase>
-    </ns0:doSpellingSuggestion>
-  </env:Body>
-</env:Envelope>
-\end{verbatim}
-\caption{This is a legal SOAP message but is not legitimate for sending
-  to the GoogleSearch web service.}\label{bogus-SOAP-request}
-\end{figure}
-\item
-Section~\ref{distmid-security-section} mentions one reason why mutual
-authentication using certificates is not common in the human-oriented
-web: merchants don't want to turn customers off by requiring them to
-get certificates.  One item of context here is that most consumers
-do business with only a small number of merchants.  This is starting
-to change, as more businesses develop online presences and as
-consumers start branching out and shopping online for more than just
-books, music, videos, and airline tickets.  Can you see any reason why
-this change might affect consumers' willingness to acquire certificates
-rather than use passwords?
 \end{chapterEnumerate}
 
 \section*{Programming Projects}
@@ -1251,22 +826,15 @@ concise explanation of what they are and why they are more convenient
 than directly using JMS.
 \item
 Work through the Java Messaging System (JMS) examples in the \textit{Java EE Tutorial}. These are in chapter 46 as of Tutorial 7.
-\item
-Work through the JAX-WS portion of the \textit{Java EE Tutorial}.  
 \end{chapterEnumerate}
 
 
 \section*{Notes}
 The topics in this chapter are subject to particularly rapid technical
 developments.  As such, your best source of information is likely to
-be the websites.  The Java website, \textit{\url{http://java.sun.com}}, has
-information both on RMI and on Java EE, which includes JMS, JAX-RPC, and JAX-WS.
-The Web Services Activity website, \textit{\url{http://w3c.org/2002/ws/}}, has
-information on WSDL, SOAP, and web services in general.  Other
-important sites for web services standards are the Web Services
-Interoperability Organization, \textit{\url{http://www.ws-i.org/}}, and OASIS,
-\textit{\url{http://www.oasis-open.org/}}, which tends to have more specialized,
-advanced standards.  The information on these sites---and in many
+be websites.  The Java website, \textit{\url{http://java.sun.com}}, has
+information both on RMI and on Java EE, which includes JMS.
+The information on this site---and in many
 published books for that matter---tends to emphasize the technical
 details over the big picture of how to use the technology.  One book
 that does provide a lot of big-picture advice on the use of messaging

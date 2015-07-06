@@ -1,6 +1,6 @@
 This directory contains the LaTeX source files for the textbook
 Operating Systems and Middleware: Supporting Controlled Interaction
-Revised Edition 1.1.6, Copyright 2011-2013 by Max Hailperin.
+Revised Edition 1.2, Copyright 2011-2015 by Max Hailperin.
 
 These files are intended for those who want to modify the book,
 whether by changing its contents or by porting it to some other
@@ -53,8 +53,8 @@ license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send
 a letter to Creative Commons, 171 Second Street, Suite 300, San
 Francisco, California, 94105, USA.
 
-The file petra.pdf is a cover photo that can optionally be enabled
-by setting a flag in os-book.tex. The attribution for this photo
+The file petra.pdf is a cover photo (which can be disbled
+using a flag in os-book.tex). The attribution for this photo
 is also included in os-book.tex.
 
 ## Version numbering convention

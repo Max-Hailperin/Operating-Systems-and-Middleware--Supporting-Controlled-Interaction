@@ -100,10 +100,8 @@ form of communication middleware, supporting distributed
 applications.  The specific messaging examples are drawn from the IBM
 WebSphere MQ system (formerly MQSeries) and the Java
 Message Service (JMS) interface, which is part of Java~2 Enterprise
-Edition (J2EE).  The other communication middleware examples are Java
-RMI (Remote Method Invocation) and web services.  Web services are
-explained in platform-neutral terms using the SOAP and WSDL standards,
-as well as through a J2EE interface, JAX-RPC (Java API for XML-Based RPC).
+Edition (J2EE).  The other communication middleware example is Java
+RMI (Remote Method Invocation).
 
 \section*{Organization of the Text}
 
@@ -238,12 +236,14 @@ IM/TransactionProcessing & \ref{transactions-chapter}\\\hline
 \section*{Your Feedback Is Welcome}
 
 Comments, suggestions, and bug reports are welcome; please send email to
-\verb|max@gustavus.edu|.  Bug reports in particular can earn you a
+\verb|max@gustavus.edu|
+or use the github issue tracker.
+Bug reports can earn you a
 bounty of \$2.56 apiece as a token of gratitude. (The great computer
 scientist Donald Knuth started this tradition.  Given how close to
 bug-free his publications have become, it seems to work.)  For
 purposes of this reward, the definition of a bug is simple: if as a
-result of your email the author chooses to make a change, then you
+result of your comment the author chooses to make a change, then you
 have pointed out a bug.  The change need not be the one you suggested,
 and the bug need not be technical in nature.  Unclear writing
 qualifies, for example.
@@ -284,7 +284,7 @@ earlier first edition commissioned
 additional resources from independent supplement authors,
 which may still be available through the publisher's website
 and would largely still apply to this revised edition.
-The author's website, \textit{\url{http://gustavus.edu/+max/os-book/}},
+The author's website, \textit{\url{https://gustavus.edu/+max/os-book/}},
 contains at least the following materials:
 \begin{itemize}
 \item
@@ -295,7 +295,7 @@ that are shown in the text
 \item
 Artwork files for all figures in the text
 \item
-An errata list that will be updated on an ongoing basis
+A link to the book's github site, which includes an issue tracker (errata list)
 \end{itemize}
 
 \section*{About the Revised Edition}
@@ -315,9 +315,9 @@ the first edition; rather than being a thorough update, it is aimed at three nar
 
 In focusing on these limited goals, a key objective was to maintain as much compatibility with the first edition as possible.  Although page numbering changed, most other numbers stayed the same.  All new exercises and projects were added to the end of the corresponding lists for that reason.  The only newly added section, \ref{nonblocking-synchronization-section}, is near the end of its chapter; thus, the only changed section number is that the old Section~4.9 (``Security and Synchronization'') became \ref{synchronization-and-security-section}.  Only in Chapter \ref{synchronization-chapter} did any figure numbers change.
 
-It is my hope that others will join me in making further updates and improvements to the text.  I am releasing it under a Creative Commons license that allows not just free copying, but also the freedom to make modifications, so long as the modified version is released under the same terms.  In order to make such modifications practical, I'm not just releasing the book in PDF form, but also as a collection of LaTeX source files that can be edited and then run through the \texttt{pdflatex} program (along with \texttt{bibtex} and \texttt{makeindex}).  The source file collection also includes PDF files of all artwork figures; Course Technology has released the rights to the artwork they contracted to have redrawn.
+It is my hope that others will join me in making further updates and improvements to the text.  I am releasing it under a Creative Commons license that allows not just free copying, but also the freedom to make modifications, so long as the modified version is released under the same terms.  In order to make such modifications practical, I'm not just releasing the book in PDF form, but also as a collection of \LaTeX\ source files that can be edited and then run through the \texttt{pdflatex} program (along with \texttt{bibtex} and \texttt{makeindex}).  The source file collection also includes PDF files of all artwork figures; Course Technology has released the rights to the artwork they contracted to have redrawn. All of this is on the github site.
 
-If you produce a modified version of this text, the Creative Commons license allows you considerable flexibility in how you make your modified version available.  I would urge you to send it back to me (\verb|max@gustavus.edu|) so that I can add your version to the main website---we will all benefit from having a central repository of progress.  Separate materials to supplement the text would also be welcome.  One category that occurs to me is animations or screencasts; the static figures in the text are rather limited. Another worthwhile project would be to transform the text into a more contribution-friendly form, such as a wiki.
+If you produce a modified version of this text, the Creative Commons license allows you considerable flexibility in how you make your modified version available.  I would urge you to contribute it back using a ``pull request'' on the main github site---we will all benefit from having a central repository of progress.  Separate materials to supplement the text would also be welcome.  One category that occurs to me is animations or screencasts; the static figures in the text are rather limited. Another worthwhile project would be to transform the text into a more contribution-friendly form, such as a wiki.
 
 \section*{Acknowledgments}
 
@@ -340,3 +340,5 @@ did not adopt all their suggestions, I did not ignore any of them, and
 I appreciate them all.
 
 In preparing the revised edition, I took advantage of suggestions from many readers.  I would like to thank all of them, even those I've managed to lose track of, to whom I also apologize.  Those I can thank by name are Joel Adams, Michael Brackney, Jack Briner, Justin Delegard, Ben Follis, MinChan Kim, Finn Kuusisto, Matt Lindner, Milo Martin, Gabe Schmidt, Fritz Sieker, and Alex Wauck.
+
+Since the initial release of the revised edition, user suggestions have continued to drive most of the progress. The github issue tracker and pull requests show the history of these valuable contributions.

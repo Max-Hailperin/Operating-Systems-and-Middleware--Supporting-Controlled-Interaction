@@ -703,8 +703,7 @@ middleware to work at a higher level than sending bytes over sockets.
 I show two basic approaches to this in Chapter~\ref{distmid-chapter}:
 messaging and Remote Procedure Calls (RPCs).  Web services are a particular
 approach to standardizing these kinds of higher-level application
-communication, and have been primarily used with RPCs:
-I show how to use them in this way.
+communication, and have often been used with RPCs.
 
 In a \vocab{messaging} system, an application program requests the
 delivery of a message.  The messaging system not only delivers the
@@ -729,8 +728,8 @@ that the object in question is located on a different computer, and so
 the call and return involve network communication.  The middleware
 hides this complexity, so that the application programmer can work
 largely as though all the objects were local.  In
-Chapter~\ref{distmid-chapter}, I explain this concept more fully, and then go
-on to show how it plays out in the form of web services.  A \vocab{web
+Chapter~\ref{distmid-chapter}, I explain this concept more fully and
+mention that it is often used in the form of web services.  A \vocab{web
 service} is an application-layer entity that programs can
 communicate with using standardized protocols similar to those humans
 use to browse the web.

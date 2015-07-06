@@ -15,11 +15,13 @@
 %% the size of the PDF and may be better suited for the cover
 %% of a hardcopy than for a document scrolled through on a
 %% computer screen.  On the other hand, it is pretty cool.
-%% For now, I'm leaving the default as \fancytitlepagefalse
-%% and distributing the PDF in that non-fancy style, but I've
-%% got all the machinery here for anyone who wants fanciness.
+%% Network bandwidth and disk capacity have become sufficiently
+%% more plentiful over the course of the 1.1.x versions that
+%% as of version 1.2, I'm changing the default to \fancytitlepagetrue
+%% and distributing the PDF in that fancy style. However, it
+%% can be turned off by anyone more frugal.
 %%
-\fancytitlepagefalse
+\fancytitlepagetrue
 %%
 \documentclass[11pt]{book}
 \usepackage{alltt}
@@ -56,7 +58,7 @@
 \title{Operating Systems and Middleware:\\Supporting Controlled Interaction}
 \author{Max Hailperin\\Gustavus Adolphus College}
 %% For version numbering convention, see https://gustavus.edu/+max/os-book/version-numbering.html
-\date{Revised Edition 1.1.6\\\today}
+\date{Revised Edition 1.2\\\today}
 \makeindex
 \begin{document}
 \bibliographystyle{plain}
@@ -84,7 +86,7 @@
 \fi
 
 \clearpage\thispagestyle{empty}
-\noindent Copyright \copyright\ 2011--2013 by Max Hailperin.
+\noindent Copyright \copyright\ 2011--2015 by Max Hailperin.
 \[\includegraphics{by-sa}\]
 This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. To view a copy of this
 license, visit
