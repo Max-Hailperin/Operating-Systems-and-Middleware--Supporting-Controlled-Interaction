@@ -1560,16 +1560,19 @@ checked.  Under what sorts of circumstances would this increase in
 work factor be sufficient?
 
 \item
-
-On a Linux system, you can read cryptographically-strong random bytes
-from {\tt /dev/random} and can generally read a list of words (one
-per line) from a file such as {\tt /usr/share/dict/words}.
-Other systems are likely to have similar information available.  Write
+Most programming environments provide some means of generating
+cryptographically-strong (pseudo-)random numbers. For example,
+in Java you can use the class \texttt{java.security.SecureRandom}.
+Many systems also contain a file that lists English words, one per line;
+for example, many Linux systems have this as {\tt /usr/share/dict/words}.
+If your system doesn't have such a file, you can find one to download on
+the web.
+Write
 a program that randomly chooses four words, each of which is four
 letters long, and prints them
 out with hyphens between them to serve as a passphrase.  For
-example, you might get the output {\tt mean-chef-pour-pubs}.  On the
-Linux distribution on my computer, there are 2236 four-letter
+example, you might get the output {\tt mean-chef-pour-pubs}.  On one
+example Linux distribution, the word list contained 2236 four-letter
 words.  How many four-word passphrases can be formed from them?  How
 long would a random string of lowercase letters need to be to have a
 comparable number of possibilities?  Which seems to be more memorizable?
