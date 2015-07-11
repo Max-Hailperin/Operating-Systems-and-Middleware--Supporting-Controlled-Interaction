@@ -2211,7 +2211,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LockFreeTicketVendor { 
     
   private static class State {
-    private int seatsRemaining, cashOnHand;
+    private final int seatsRemaining, cashOnHand;
     
     public State(int seatsRemaining, int cashOnHand) {
       this.seatsRemaining = seatsRemaining;
@@ -2222,8 +2222,8 @@ public class LockFreeTicketVendor {
     public int getCashOnHand(){return cashOnHand;}
   }
 
-  private AtomicReference<State> state;
-  private int startingSeats, startingCash;
+  private final AtomicReference<State> state;
+  private final int startingSeats, startingCash;
 
   public LockFreeTicketVendor(int startingSeats,
                               int startingCash) {
