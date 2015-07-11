@@ -613,9 +613,9 @@ satisfy one or more of the scheduling goals.}
 Many schedulers use a numerical \vocab{priority} for each thread;
 this controls which threads are selected for execution.  The threads with
 higher priority are selected in preference to those with lower priority.
-No thread will ever be running if another thread with higher priority
-is not running, but is in the
-runnable state.  The simplest
+No thread is ever left in the runnable state but not running while
+another thread with lower priority is running.
+The simplest
 way the priorities can be assigned is for the user to manually specify
 the priority of each thread, generally with some default value if none
 is explicitly specified.  Although there may be some way for the user
