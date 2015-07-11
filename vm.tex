@@ -1676,10 +1676,10 @@ paging.  Today, that is true.  However, when virtual memory was first
 developed in the 1960s, there were two competing approaches: paging
 and \vocab{segmentation}.  Some systems (notably Multics) also included a
 hybrid of the two.  Thus, seen historically, segmentation was both a
-competitor and a collaborator of paging.  Today, segmentation remains
-only in vestigial form.  The IA-32 architecture still contains full
-support for segmentation, but no common operating system uses it, and
-the successor architectures (Itanium and AMD64) have dropped it.  As
+competitor and a collaborator of paging.
+This subsection describes segmentation from this historical perspective. Although the word ``segmentation'' is still used today for some related concepts,
+segmentation in the sense described here has gone extinct.
+As
 such, this subsection can be omitted with no great loss.
 
 Recall that the basic premise of virtual memory is that a process uses
@@ -1707,7 +1707,10 @@ within that page.  For example, a 32-bit address might be divided into a
 difference is that pages are purely an implementation detail; they do
 not correspond to logical objects such as files, stacks, or tables.
 
-Because segments correspond to logical objects, they cannot have a
+Because segments correspond to logical objects, they serve
+as natural units for protection and sharing, as well as for
+named storage of persistent objects in files.
+However, they cannot have a
 fixed size, such as 4~KB.  Each segment will have its own natural
 size.  For example, each file a process accesses might be mapped into
 the virtual address space as its own segment.  If so, the segment
