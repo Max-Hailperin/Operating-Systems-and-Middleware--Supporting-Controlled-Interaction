@@ -2299,9 +2299,12 @@ continue being sold---but one particular thread keeps retrying.
 Stronger forms of nonblocking synchronization, known as ``\foldvocab{wait-free}{synchronization},'' guarantee that each individual thread makes
 progress.  However, wait-free synchronization is considerably more
 complex than the style of lock-free synchronization shown here
-and hence is rarely used in practice.
+and hence is rarely used in practice. Improving the practicality of
+wait-free synchronization has remained an active research area. Enough
+progress has been made, particularly in the period 2011--2014, to suggest that
+wait-free synchronization's day may be coming.
 
-Similar techniques can be used to create lock-free data structures
+Compare-and-set techniques can also be used to create lock-free data structures
 that allow multiple threads to carry out operations concurrently, to
 the maximum extent possible. For example, if a queue is going to
 deliver data in a well-defined order, dequeue operations need to be
@@ -2896,6 +2899,8 @@ eat, without the neighboring philosophers taking multiple turns first.
 The textbook by \index{Herlihy, Maurice}Herlihy and \index{Shavit, Nir}Shavit~\cite{max1202} is a good starting point for learning about nonblocking synchronization.
 
 The lock-free ticket vendor example relies crucially on Java's garbage collector (automatic memory management) so that each time an update is performed, a new \texttt{State} object can be created and there are no problems caused by reusing old objects.  Without garbage collection, safe memory reclamation for lock-free objects is considerably more interesting, as shown by \index{Michael, Maged M.}Michael~\cite{max1203}.
+
+One example of wait-free synchronization becoming more practical is the series of papers by \index{Kogan, Alex}Kogan and \index{Petrank, Erez}Petrank~\cite{Kogan:2011:WQM:1941553.1941585,Kogan:2012:MCF:2145816.2145835} and \index{Timnat, Shahar}Timnat and \index{Petrank, Erez}Petrank \cite{Timnat:2014:PWS:2555243.2555261}.
 
 The \index{TOCTTOU}\index{Time Of Check To Time Of Use}TOCTTOU race vulnerability in Sun's mail delivery software was
 reported in 1992 by a group known as \index{eight lgm@[8lgm]}[8lgm].  Their site,
