@@ -699,7 +699,9 @@ though a procedure call instruction were forcibly inserted between the
 currently executing instruction and the next one.  Thus, rather than
 moving on to the program's next instruction, the processor jumps off
 to the special procedure called the \vocab{interrupt
-handler}.  The interrupt handler, which is part of the operating
+handler}.
+
+The interrupt handler, which is part of the operating
 system, deals with the hardware device and then executes a \vocab{return
 from interrupt} instruction, which jumps back to the instruction that
 had been about to execute when the interrupt occurred.  Of course, in
@@ -709,21 +711,31 @@ start and restore them before returning.
 
 Using this interrupt mechanism, an operating system can provide
 preemptive multitasking.  When an interrupt occurs, the interrupt
-handler first takes care of the immediate needs, such as
+handler first
+saves the registers to the current thread's stack and
+takes care of the immediate needs, such as
 accepting data from a network interface controller or updating the
 system's idea of the current time by one millisecond.  Then,
 rather than simply restoring the registers and executing a return from
 interrupt instruction, the interrupt handler checks whether it would
 be a good time to preempt the current thread and switch to another.
+
 For example, if the interrupt signaled the arrival of data for which a
 thread had long been waiting, it might make sense to switch to
 that thread.  Or, if the interrupt was from the timer and the current
 thread had been executing for a long time, it may make sense to give
 another thread a chance.  These policy decisions are related to
-scheduling, the topic of Chapter~\ref{scheduling-chapter}.  In any case, if the
+scheduling, the topic of Chapter~\ref{scheduling-chapter}.
+
+In any case, if the
 operating system decides to preempt the current thread, the interrupt
 handler switches threads using a
 mechanism such as the \verb|switchFromTo| procedure.
+This switching of threads includes switching to the new thread's stack,
+so when the interrupt handler restores registers before returning,
+it will be restoring the new thread's registers. The previously running
+thread's register values will remain safely on its own stack until that
+thread is resumed.
 
 \section{Security and Threads}
 
