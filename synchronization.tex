@@ -1770,32 +1770,47 @@ deadlock as part of my explanation of transactions.
 %Note that I've taken liberties with when the SQL> prompt is displayed,
 %always putting it where the command is being entered, rather than when
 %it was actually displayed (eariler).  I've also had to break lines.
+{\color{blue}
 \begin{verbatim}
 SQL> update accounts set balance = balance - 100
-                     where account_number = 1;
-
-1 row updated.
-
-    SQL> update accounts set balance = balance - 250
-                         where account_number = 2;
-
-    1 row updated.
-
+                            where account_number = 1;
+\end{verbatim}
+}
+\begin{verbatim}1 row updated. \end{verbatim}
+{\color{blue}
+\begin{verbatim}
+SQL> update accounts set balance = balance - 250
+                            where account_number = 2;
+\end{verbatim}
+}
+\begin{verbatim}1 row updated. \end{verbatim}
+{\color{blue}
+\begin{verbatim}
 SQL> update accounts set balance = balance + 100 
-                         where account_number = 2;
--- note no response, for now this SQL session is hanging
-
-    SQL> update accounts set balance = balance + 250 
+                            where account_number = 2;
+\end{verbatim}
+}
+\begin{verbatim}-- note no response, for now this SQL session is hanging \end{verbatim}
+{\color{blue}
+\begin{verbatim}
+SQL> update accounts set balance = balance + 250 
                          where account_number = 1;
-    -- this session hangs, but in the other SQL session we get
-    -- the following error message:
-
-update accounts set balance = balance + 100 
+\end{verbatim}
+}
+\begin{verbatim}-- this session hangs, but in the other SQL session we get
+        the following error message: \end{verbatim}
+{\color{blue}
+\begin{verbatim}
+SQL>update accounts set balance = balance + 100 
                 where account_number = 2
-       *
+\end{verbatim}
+}
+{\color{red}
+\begin{verbatim}       *
 ERROR at line 1:
 ORA-00060: deadlock detected while waiting for resource 
 \end{verbatim}
+}
 \caption{The Oracle database
   system detects a deadlock between two sessions connected to the same
   database.  One session, shown at the left margin, is transferring \$100
