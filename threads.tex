@@ -154,7 +154,7 @@ public class Simple2Threads {
     sleep(5000);
     System.out.println("Parent is done sleeping 5 seconds.");
   }
-  
+
   private static void sleep(int milliseconds){
     try{
       Thread.sleep(milliseconds);
@@ -845,7 +845,7 @@ memory.  Why is this not necessary for subroutine invocations?
 \item\label{first-threads-program-input-time}
 If
 you program in C, read the documentation for
-\index{pthread_cancel@\verb"|pthread_cancel"|}\verb|pthread_cancel|. 
+\index{pthread_cancel@\verb"|pthread_cancel"|}\verb|pthread_cancel|.
 Using this information and the model provided in
 Figure~\ref{simple2threads} on page~\pageref{simple2threads},
 write a program where the initial
@@ -955,5 +955,6 @@ to a block of code that ends with the \verb|ret| instruction.
 My brief descriptions of the \index{POSIX}POSIX and \index{Java API}Java APIs are intended only as
 concrete illustrations of broader concepts, not as a replacement for
 documentation of those APIs.  You can find the official documentation
-on the web at \textit{\url{http://www.unix.org}} and \textit{\url{http://java.sun.com}},
+on the web at \textit{\url{http://opengroup.org/unix}}
+and \textit{\url{http://www.oracle.com/technetwork/java/index.html}},
 respectively.
