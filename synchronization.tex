@@ -2804,7 +2804,7 @@ Cache-conscious spinlocks were introduced under the name ``Test-and-Test-and-Set
 
 Recall that my brief descriptions of the POSIX and Java APIs are no
 replacement for the official documentation on the web at
-\textit{\url{http://www.unix.org}} and \textit{\url{http://java.sun.com}}, respectively.  In particular, I claimed that each Java mutex could only be associated with a single condition variable, unlike in the POSIX API. Actually, version 1.5 of the Java API gained a second form of mutexes and condition variables, contained in the \verb|java.util.|\linebreak[0]\verb|concurrent.locks| package. These new mechanisms are not as well integrated with the Java programming language as the ones I described, but do have the feature of allowing multiple condition variables per mutex.
+\textit{\url{http://opengroup.org/unix}} and \textit{\url{http://www.oracle.com/technetwork/java/index.html}}, respectively.  In particular, I claimed that each Java mutex could only be associated with a single condition variable, unlike in the POSIX API. Actually, version 1.5 of the Java API gained a second form of mutexes and condition variables, contained in the \verb|java.util.|\linebreak[0]\verb|concurrent.locks| package. These new mechanisms are not as well integrated with the Java programming language as the ones I described, but do have the feature of allowing multiple condition variables per mutex.
 
 My spinlocks depend on an atomic exchange instruction.  I mentioned
 that one could also use some other atomic read-and-update instruction,
