@@ -1438,16 +1438,26 @@ Programming Project~\ref{semaphore-project}, you can instead write your own {\tt
 condition variables.
 
 In order to show semaphores in the best possible light, I also moved
-away from using an array to store the buffer.  Instead, I used a
-\texttt{List}, provided by the Java API.  If, in Programming Project~\ref{semaphore-array-bb-project}, you try rewriting
+away from using an array to store the buffer.  Instead, I used the
+method \verb|synchronizedList| to create a thread-safe list for the
+buffer.  Behind the scenes, Java's monitor mechanism with
+\verb|synchronized| (which was explained in
+Section~\ref{monitors-section}) ensures mutual exclusion for methods
+on the resulting list; in particular, \verb|add| and \verb|remove| are
+executed under mutual exclusion on the shared buffer to prevent races
+that could otherwise lead to corruption of the buffer's underlying
+data structure.
+If, in Programming Project~\ref{semaphore-array-bb-project}, you try rewriting
 this example to use an array (as in Figure~\ref{BoundedBuffer.java}),
 you will discover two blemishes.  First, you will need the
-\verb|numOccupied| integer variable, as in Figure~\ref{BoundedBuffer.java}.  This duplicates the information contained in
+\verb|numOccupied| integer variable, as in Figure~\ref{BoundedBuffer.java}.
+This duplicates the information contained in
 \verb|occupiedSem|, simply in a different form.  Second, you will need
 to introduce explicit mutex synchronization with \verb|synchronized|
 statements around the code that updates the nonsemaphore state
 variables.  With those complications, semaphores lose some of their
-charm.  However, by using a \texttt{List}, I hid the extra complexity.
+charm.  However, by using a thread-safe list, I hid the extra
+complexity.
 
 \section{Deadlock}\label{deadlock-section}
 
