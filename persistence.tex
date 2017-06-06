@@ -792,10 +792,14 @@ into storage locations.  In virtual memory, the mapping is from
 virtual addresses within address spaces to physical addresses within
 memory.  In a file system, the mapping is from positions within files
 to locations in persistent storage.  For efficiency, the mapping is done at a coarse
-granularity, several kilobytes at a time.  In virtual memory, each
+granularity, several kibibytes at a time.  In virtual memory, each
 page is mapped into a page frame; in a file system, each block of a
-file is mapped into a storage block.  (You will see that blocks are
-typically several kilobytes in size, spanning multiple sectors.)
+file is mapped into a storage block.  (Recall from Section~\ref{vm-reps}
+that ``kibi'' is the binary unit for 1024.  You will see that blocks are
+typically several kibibytes in size, spanning multiple sectors.
+Note, however, that transfer speeds and \emph{sizes} of hard disks are
+usually advertised based on powers of ten.  In particular, a 1-TB disk is
+way too small to store 1 TiB.)
 
 When discussing virtual memory, I remarked that the operating system
 was free to assign any unused page frame of physical memory to hold
@@ -850,9 +854,9 @@ subsection the phenomena that cause space to be unusable.
 
 One source of waste is that space is allocated only in integer
 multiples of some file system block size.  For example, a file system
-might allocate space only in units of 4~KB.  A file that is too big to
-fit in a single 4-KB unit will be allocated 8~KB of space---even if it
-is only a single byte larger than 4~KB.  The unused space in the last
+might allocate space only in units of 4~KiB.  A file that is too big to
+fit in a single 4-KiB unit will be allocated 8~KiB of space---even if it
+is only a single byte larger than 4~KiB.  The unused space in the last
 file block is called \foldvocab{internal}{fragmentation}.  The
 amount of internal fragmentation depends not only on the desired file sizes,
 but also on the file system block size.  As an analogy, consider
@@ -866,7 +870,7 @@ The file system block size is always some multiple of the underlying
 disk drive's sector size; no file system ever subdivides the space
 within a single disk sector.  Generally the file system blocks span
 several consecutive disk sectors; for example, eight disk sectors of 512
-bytes each might be grouped into each 4-KB file system block.  Larger
+bytes each might be grouped into each 4-KiB file system block.  Larger
 file system blocks cause more internal fragmentation, but are
 advantageous from other perspectives.  In particular, you will see that
 a larger block size tends to reduce
@@ -882,9 +886,9 @@ consecutive extent.  For the moment, I will consider this to be an
 absolute requirement.  Later, I will consider relaxing it.
 
 Continuing with my earlier example, suppose you need space for a file
-that is just one byte larger than 4~KB and hence has been rounded up
-to two 4-KB blocks.  The new requirement of contiguity means that you
-are looking for somewhere on the disk where two consecutive 4-KB blocks
+that is just one byte larger than 4~KiB and hence has been rounded up
+to two 4-KiB blocks.  The new requirement of contiguity means that you
+are looking for somewhere on the disk where two consecutive 4-KiB blocks
 are free.  Perhaps you are out of luck.  Maybe the disk is only half
 full, but the half that is full consists of every even-numbered file
 system block with all the odd-numbered ones available for use.  This
@@ -1043,8 +1047,8 @@ which increases internal fragmentation, decreases external
 fragmentation.  The reason for this is that with a larger block size,
 there is less variability in the amount of space being allocated.
 Files that might have different sizes when rounded up to the next
-kilobyte (say, 14~KB and 15~KB) may have the same size when rounded to
-the next multiple of 4~KB (in this case, 16~KB and 16~KB).  Reduced
+kibibyte (say, 14~KiB and 15~KiB) may have the same size when rounded to
+the next multiple of 4~KiB (in this case, 16~KiB and 16~KiB).  Reduced
 variability reduces external fragmentation; in the extreme case, no
 external fragmentation at all occurs if the files are all allocated
 the same amount of space.
@@ -1147,8 +1151,8 @@ search an entire large disk for a desired size extent of free space.
 Many UNIX and Linux file systems use a slight variant on the bitmap
 approach.  Linux's ext3fs file system can serve as an example.  The
 overall disk space is divided into modest-sized chunks known as
-\vocabs{block group}.  On a system with 4-KB disk blocks,
-a block group might encompass 128~MB.  Each block group has its own
+\vocabs{block group}.  On a system with 4-KiB disk blocks,
+a block group might encompass 128~MiB.  Each block group has its own
 bitmap, indicating which blocks within that group are free.  (In
 Exercise~\ref{block-group-bitmap-exercise}, you can show that in the example given, each block group's
 bitmap fits within a single block.)  Summary information for the file
@@ -1391,8 +1395,8 @@ allocate a second inode; it allocates a whole additional disk block, an
 \foldvocab{indirect}{block}.  This provides room for many more
 block numbers, as shown in Figure~\ref{single-indirect-inode}.  The
 exact number of additional block numbers depends on how big blocks and
-block numbers are.  With 4-KB blocks and 4-byte block numbers, an
-indirect block could hold 1~K block numbers (that is, 1024 block
+block numbers are.  With 4-KiB blocks and 4-byte block numbers, an
+indirect block could hold 1~Ki block numbers (that is, 1024 block
 numbers), as shown in the figure.  This kind of indirect block is more
 specifically called a \foldvocab{single}{indirect block}, because it
 adds only a single layer of indirection: the inode points to it, and
@@ -1414,8 +1418,8 @@ appearance in the figure.}
 \label{single-indirect-inode}
 \end{figure}
 
-In this example with 4-KB blocks, the single indirect block allows you
-to accommodate files slightly more than 4~MB in size.  To handle
+In this example with 4-KiB blocks, the single indirect block allows you
+to accommodate files slightly more than 4~MiB in size.  To handle
 yet-larger files, you can use a multilevel tree scheme, analogous to
 multilevel page tables.  The inode can contain a block number for a
 double indirect block, which contains block numbers for many more
@@ -1612,7 +1616,7 @@ each.
 
 At first, it may not be obvious why extent maps are a big improvement.
 A typical block map system might use a 4-byte block number to refer
-to each 4-KB block.  This is less than one-tenth of one percent space
+to each 4-KiB block.  This is less than one-tenth of one percent space
 overhead, surely affordable with today's cheap disk storage.  What
 reason do file system designers have to try to further reduce such an already small
 overhead?  (I will ignore the possibility that the extent map takes
@@ -1641,7 +1645,7 @@ Linux from SGI's IRIX version of UNIX.  For files that have only a
 handful of extents (by far the most common case), all three store the
 sequence of extent map entries in the inode or (in Windows and Mac
 OS~X) in the corresponding inode-like structure.  The analogs of inodes in
-NTFS are large enough (1~KB) that they can directly store entire
+NTFS are large enough (1~KiB) that they can directly store entire
 extent maps for most files, even those with more than a few extents. The other
 two file systems use smaller inodes (or inode-like structures) and so
 provide an interesting comparison of techniques for handling the
@@ -1733,7 +1737,7 @@ The first subtree contains keys smaller than the first root key, the
 next subtree contains keys between the first and second root keys,
 and so forth.  The last subtree contains keys larger than the last root key.
 
-If a multi-kilobyte disk block is used to hold a B-tree node, the
+If a multi-kibibyte disk block is used to hold a B-tree node, the
 value of $N$ can be quite large, resulting in a broad, shallow tree.
 In fact, even if a disk block were only half full with root keys and
 subtree pointers, it would still provide a substantial branching
@@ -2683,7 +2687,7 @@ using indexes.  However, this feature may have other undesirable
 consequences for system performance.  Based on the description in this
 chapter, what would you expect the performance problem to be?
 \item\label{block-group-bitmap-exercise}
-Show that if a file system uses 4-KB disk blocks and 128-MB block
+Show that if a file system uses 4-KiB disk blocks and 128-MiB block
 groups, the bitmap for a block group fits within a single block.
 \item\label{best-fit-first-fit-exercise}
 Best-fit allocation sounds superior to first-fit, but in actuality,
@@ -2698,7 +2702,7 @@ other in which first-fit succeeds but best-fit gets stuck.
 \item\label{largest-double-indirect-exercise}
 Assume an inode contains 12 direct block numbers, as well as single,
 double, and triple indirect block numbers.  Further, assume that each
-block is 4~KB, and that each block number is 4 bytes.  What is the
+block is 4~KiB, and that each block number is 4 bytes.  What is the
 largest a file can be without needing to use the triple indirect block?
 \item
 Draw two alternative ``after'' pictures for Figure~\ref{B-tree-split}
@@ -2975,8 +2979,8 @@ comparison of best-fit and first-fit allocation, is by
 
 I mentioned that the analogs of inodes in Microsoft's NTFS are large
 enough to contain the entire extent maps for most files.  In the rare
-case that the extent map does not fit in a single 1-KB record, NTFS
-expands the metadata into multiple 1-KB records, but unlike other file
+case that the extent map does not fit in a single 1-KiB record, NTFS
+expands the metadata into multiple 1-KiB records, but unlike other file
 systems, it continues to use a linear extent map rather than a B$^+$-tree.
 
 B-trees were introduced by \index{Bayer, R.}Bayer and \index{McCreight, E.}McCreight~\cite{max1114}.  A
