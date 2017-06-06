@@ -1529,9 +1529,27 @@ At this point, each of us is waiting for the other: we have
 deadlocked.
 
 More generally, a \vocab{deadlock} exists whenever there is a cycle of
-threads, each waiting for some resource held by the next.  In the
-example, there were two threads and the resources involved were two
-mutexes.  Although deadlocks can involve other resources as well
+threads, each waiting for some resource held by the next, under the
+following defining conditions:
+\begin{enumerate}\label{deadlock-conditions}
+\item Threads hold resources exclusively (``mutual exclusion'').
+\item Threads hold some resources while waiting for additional ones
+  (``wait for'').
+\item Resources cannot be removed from threads forcibly (``no
+  preemption'').
+\item Threads wait in a circular chain such that each thread holds
+  resources that are requested by the next thread in the chain.
+\end{enumerate}
+
+In the example, there are two threads and the resources involved are
+two mutexes.  Clearly, mutexes are held exclusively (condition (1)),
+each thread holds one mutex while waiting for another one (condition
+(2)), mutexes are never removed by the operating system but threads
+need to release them on their own (condition (3)), and both threads
+wait for each other, forming the shortest circular chain possible
+(condition (4)).
+
+Although deadlocks can involve other resources as well
 (consider readers/writers locks, for example), I will focus
 on mutexes for simplicity.
 
@@ -1606,7 +1624,11 @@ most practical ways to address the threat of deadlocks.
 \subsection{Deadlock Prevention Through Resource Ordering}\label{deadlock-prevention-section}
 
 The ideal way to cope with deadlocks is to prevent them from
-happening.  One very practical technique for deadlock prevention can
+happening.  In principle, deadlock prevention aims to ensure that at
+least one of the four defining conditions is not satisfied.
+One very practical technique for deadlock prevention targets the
+circular wait situation characterized by condition (4) by imposing a
+linear order in which resources need to be locked.  This technique can
 be illustrated through the example of transferring money between two bank accounts.
 Each of the two accounts is stored somewhere in the computer's
 memory, which can be specified through a numerical address.  I will
@@ -2854,8 +2876,10 @@ best of his other three approaches is ``Approach 2,'' which calls for
 obtaining all necessary resources at the same time, rather than one by
 one.  Coffman\index{Coffman, E. G.@Coffman, E.~G.}, \index{Elphick,
 M.}Elphick and \index{Shoshani, A.}Shoshani~\cite{max998} published a survey
-of deadlock issues in 1971, which made the contemporary distinction
-between deadlock prevention and deadlock avoidance.
+of deadlock issues in 1971, which is the origin of the four defining
+conditions of deadlocks presented on
+page~\pageref{deadlock-conditions} and which made the
+contemporary distinction between deadlock prevention and deadlock avoidance.
 
 In 1971, \index{Courtois, P. J.@Courtois P.~J.}Courtois,
 \index{Heymans, F.}Heymans, and \index{Parnas, D. L.@Parnas, D.~L.}Parnas~\cite{max997} described both
