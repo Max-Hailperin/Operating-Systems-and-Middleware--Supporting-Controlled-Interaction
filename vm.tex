@@ -113,8 +113,10 @@ that shown in Figure~\ref{PM-diagram}, where the physical addresses come directl
 \end{figure}
 
 The difference between the processor's and memory's perspectives becomes apparent when you consider that
-the processor may be dividing its time between multiple computational
-processes.
+the processor may be dividing its time between multiple programs.
+As I will explain briefly in Section~\ref{vm-private-storage-section}
+and in detail in Chapter~\ref{processes-chapter}, the operating system
+represents running programs as \emph{processes}.
 Sometimes the processes will each need a private object,
 yet the natural name to use will be the same in more than one process.
 Figure~\ref{scan-6-2} shows how this necessitates using different
