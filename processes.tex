@@ -663,8 +663,8 @@ modes.  If the kernel uses the same page table as the user-mode
 process, then the range of addresses occupied by the kernel will be
 off limits to the process.  The IA-32 architecture fits this pattern.
 For example, the Linux operating system on the IA-32 allows each
-user-mode process to access up to 3~GB of its 4-GB address space,
-while reserving 1~GB for access by the kernel only.
+user-mode process to access up to 3~GiB of its 4-GiB address space,
+while reserving 1~GiB for access by the kernel only.
 
 In this latter sort of architecture, the address space doesn't change
 when switching from a user process to a simple operating system
@@ -765,7 +765,7 @@ into several processes' address spaces.
 
 The multiple address space design is particularly appropriate on
 architectures with comparatively narrow addresses.  For example, a
-32-bit address can reference only a 4-GB address space.  If a 32-bit
+32-bit address can reference only a 4-GiB address space.  If a 32-bit
 system is going to run several processes, each of which has a couple
 gigabytes of data to access, the only way to obtain enough space is by
 using multiple address spaces.  This motivation for multiple address
@@ -2285,7 +2285,7 @@ Compare C-list capabilities with addressable capabilities.  Which is
 more powerful for the application programmer?  Which is simpler for
 the operating system designer?  Justify your answers.
 \item
-Suppose the processes on a computer occupy a total of 8~GB of virtual
+Suppose the processes on a computer occupy a total of 8~GiB of virtual
 memory, half of which is occupied by addressable capabilities.
 Suppose that each capability is represented by a random string of 256
 bits, subject to the constraint that no two of the capabilities are equal.  What is the probability that a randomly generated string of 256
