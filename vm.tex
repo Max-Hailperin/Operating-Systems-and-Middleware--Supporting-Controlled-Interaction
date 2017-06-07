@@ -784,9 +784,17 @@ beneficial.  (As explained in the notes, Linux has moved in this direction.)
 
 Typical page sizes have grown over the decades, for reasons you can
 explore in Exercises \ref{page-size-execercise-1} and \ref{page-size-execercise-2}; today, the most common
-is 4 kilobytes (KB).  Each page of virtual memory and each page frame of physical
+is 4 kibibytes (KiB).\footnote{\label{kibibyte}Sizes related to main memory are usually
+  based on powers of 2, not powers of 10 used
+  elsewhere (for example, sizes of secondary storage devices).  To
+  avoid confusion, units based on powers of 2 have been standardized
+  with their own prefixes such as ``kibi'' and ``mebi'' instead of
+  ``kilo'' and ``mega''; see the Wikipedia article on
+  {\href{https://en.wikipedia.org/wiki/Kibibyte}{Kibibytes}}
+  for more details.}
+Each page of virtual memory and each page frame of physical
 memory is this size, and each starts at an address that is a multiple
-of the page size.  For example, with 4-KB pages, the first page (or
+of the page size.  For example, with 4-KiB pages, the first page (or
 page frame) has address 0, the next has address 4096, then 8192, and
 so forth.
 
@@ -854,7 +862,7 @@ The numbers next to the
 boxes are page numbers and page frame numbers.  The starting
 addresses are these numbers multiplied by the page size.
 At the top of this figure, you can see that page~0 is stored in page
-frame~1.  If the page size is 4~KB, this means that virtual address 0
+frame~1.  If the page size is 4~KiB, this means that virtual address 0
 translates to physical address 4096, virtual address 100 translates to
 physical address 4196, and so forth.  The virtual address of the last
 4-byte word in
@@ -974,9 +982,9 @@ allocation for the rest of virtual memory.
 \item
 The operating system designers need to use tools such as variable page
 size to reduce TLB entry consumption.  At a minimum, even if all
-application processes use small pages (4~KB), the operating system
+application processes use small pages (4~KiB), the operating system
 itself can use larger pages.  Similarly, a video frame buffer of many
-consecutive megabytes needn't be carved up into 4-KB chunks.  As a
+consecutive megabytes needn't be carved up into 4-KiB chunks.  As a
 secondary benefit, using larger pages can reduce the size of page tables.
 In many cases, smaller page tables are also quicker to access.
 \item
@@ -1130,13 +1138,13 @@ information that page~3 has no valid mapping would be found 12 bytes
 after the base address of the table.
 
 The fundamental problem with linear page tables is that real ones are
-much larger than this example.  For a 32-bit address space with 4-KB
+much larger than this example.  For a 32-bit address space with 4-KiB
 pages, there are $2^{20}$ pages, because 12 of the 32 bits are used to
-specify a location within a page of 4~KB or $2^{12}$ bytes.  Thus, if
-you again assume 4~bytes per page table entry, you now have a 4-MB
+specify a location within a page of 4~KiB or $2^{12}$ bytes.  Thus, if
+you again assume 4~bytes per page table entry, you now have a 4-MiB
 page table.  Storing one of those per process could use up an
 undesirably large fraction of a computer's memory.  (My computer is currently running 70
-processes, for a hypothetical total of 280~MB of page tables, which
+processes, for a hypothetical total of 280~MiB of page tables, which
 would be 36~percent of my total RAM.) Worse yet, modern processors are moving to
 64-bit address spaces.  Even if you assume larger pages, it is hard to
 see how a linear page table spanning a 64-bit address space could be
@@ -1192,7 +1200,7 @@ valid entries, even if there are also a few invalid entries mixed in,
 and not store those chunks that contain entirely invalid entries.
 \item
 In fact, you can choose your chunks of page table to be the same size as
-the pages themselves.  For example, in a system with 4-KB pages and
+the pages themselves.  For example, in a system with 4-KiB pages and
 4-byte page table entries, each chunk of page table would contain
 1024 page table entries.  Many of these chunks won't actually need
 storage, because there are frequently 1024 unused pages in a row.  Therefore,
@@ -1322,16 +1330,16 @@ array.
 For simplicity, start by considering the two-level case.  This suffices
 for 32-bit architectures and is actually used in the extremely
 popular IA-32 architecture, the architecture of Intel's Pentium and
-AMD's Athlon family microprocessors.  The IA-32 architecture uses 4-KB
+AMD's Athlon family microprocessors.  The IA-32 architecture uses 4-KiB
 pages and has page table entries that occupy 4~bytes.  Thus, 1024
 page-table entries fit within one page-sized chunk of the page table.
-As such, a single chunk can span 4~MB of virtual address space.  Given
+As such, a single chunk can span 4~MiB of virtual address space.  Given
 that the architecture uses 32-bit virtual addresses, the full virtual address space
-is 4 gigabytes (GB) (that is, $2^{32}$ bytes); it can be spanned by 1024 chunks of the
+is 4 gibibytes (GiB) (that is, $2^{32}$ bytes); it can be spanned by 1024 chunks of the
 page table.  All you need to do is locate the storage of each of those
 1024 chunks or, in some cases, determine that the chunk didn't merit
 storage.  You can do that using a second-level structure, much like
-each of the chunks of the page table.  It, too, is 4~KB in size and
+each of the chunks of the page table.  It, too, is 4~KiB in size and
 contains 1024 entries, each of which is 4~bytes.  However, these entries in
 the second-level \vocab{page directory} point to the 1024 first-level
 chunks of the page table, rather than to individual page frames.  See
@@ -1466,19 +1474,19 @@ the memory access.
 
 This description, although somewhat simplified, shows the key
 feature of the IA-32 design: it has a compact page directory, with
-each entry covering a span of 4~MB.  For the 4-MB regions that are
+each entry covering a span of 4~MiB.  For the 4-MiB regions that are
 entirely invalid, nothing further is stored.  For the regions
 containing valid pages, the page directory entry points to another
 compact structure containing the individual page table entries.
 
 The
 actual IA-32 design derives some additional advantages from having the page
-directory entries with their 4-MB spans:
+directory entries with their 4-MiB spans:
 \begin{itemize}
 \item
 Each page directory entry can optionally point directly to a single
-large 4-MB page frame, rather than pointing to a chunk of page table
-entries leading indirectly to 4-KB page frames, as I described.  This
+large 4-MiB page frame, rather than pointing to a chunk of page table
+entries leading indirectly to 4-KiB page frames, as I described.  This
 option is controlled by a page-size bit in the page directory entry.
 By using this feature, the operating system can more efficiently
 provide the mapping information for large, contiguously allocated
@@ -1486,9 +1494,9 @@ structures.
 \item
 Each page directory entry contains permission bits, just like the page
 table entries do.  Using this feature, the operating system can mark
-an entire 4-MB region of virtual address space as being read-only
+an entire 4-MiB region of virtual address space as being read-only
 more quickly, because it doesn't need to set the read-only bits
-for each 4-KB page in the region.  The translation process
+for each 4-KiB page in the region.  The translation process
 outlined earlier is extended to check the permission bits at each
 level and signal a page fault interrupt if there is a permission
 violation at either level.
@@ -1508,12 +1516,12 @@ processors and later imitated by Intel under the name IA-32e) employs
 four-level page tables of this kind.  Although the AMD64 is nominally
 a 64-bit architecture, the virtual addresses are actually limited to
 only 48 bits in the current version of the architecture.  Because the
-basic page size is still 4~KB, the rightmost 12 bits are still the
+basic page size is still 4~KiB, the rightmost 12 bits are still the
 offset within a page.  Thus, 36 bits remain for the virtual page
 number.  Each page table entry (or similar entry at the higher levels)
 is increased in size to 8 bytes, because the physical addresses
-are larger than in IA-32.  Thus, a 4-KB chunk of page table can reference
-only 512 pages spanning 2~MB.  Similarly, the branching factor
+are larger than in IA-32.  Thus, a 4-KiB chunk of page table can reference
+only 512 pages spanning 2~MiB.  Similarly, the branching factor
 at each higher level of the tree is 512.  Because 9 bits are needed
 to select from 512 entries, it follows that the 36-bit virtual page
 number is divided into four groups of 9 bits each, one for each
@@ -1713,7 +1721,7 @@ Because segments correspond to logical objects, they serve
 as natural units for protection and sharing, as well as for
 named storage of persistent objects in files.
 However, they cannot have a
-fixed size, such as 4~KB.  Each segment will have its own natural
+fixed size, such as 4~KiB.  Each segment will have its own natural
 size.  For example, each file a process accesses might be mapped into
 the virtual address space as its own segment.  If so, the segment
 sizes will need to match the file sizes, which could be quite
@@ -2565,7 +2573,7 @@ trend in page sizes.  On the other hand, there are also real-world
 influences causing page sizes to remain unchanged for many years.  Can
 you think of what some of these influences might be?
 \item\label{page-6-translation-exercise}
-Assume a page size of 4~KB and the page mapping shown in
+Assume a page size of 4~KiB and the page mapping shown in
 Figure~\ref{example-mapping} on page~\pageref{example-mapping}.  What are the virtual addresses of the
 first and last 4-byte words in page~6?  What physical addresses do
 these translate into?
@@ -2583,7 +2591,7 @@ that for all integers $n$, page number $n$ is mapped by the page table into page
 number $f(n)$.  Give a mathematical formula for the physical address
 that corresponds with virtual address $v$.
 \item\label{linear-page-table-size-exercise}
-Suppose an architecture uses 64-bit virtual addresses and 1-MB pages.
+Suppose an architecture uses 64-bit virtual addresses and 1-MiB pages.
 Suppose that a linear page table is stored in full for each process,
 containing a page table entry for every page number.  Suppose that the size
 of each page table entry is only 4 bytes.  How large would each
@@ -2598,7 +2606,7 @@ to 32 bits.  Newer IA-32 processors offer an optional \vocab{Physical Address
 Extension} (\vocab{PAE}) mode in order to address up to sixteen times as
 much RAM.  One consequence of this is that page table entries (and
 page directory entries) are increased to 8 bytes instead of 4.
-Each page and chunk of page table is still 4~KB.
+Each page and chunk of page table is still 4~KiB.
 \begin{enumerate}
 \item
 How many entries can each chunk of page table or page directory now hold?
@@ -2606,11 +2614,11 @@ How many entries can each chunk of page table or page directory now hold?
 How big a virtual address range does each chunk of page table now
 span?  (A page directory entry can also directly point to a large
 page frame this size, just as without PAE it can directly point to a
-4-MB page frame.)
+4-MiB page frame.)
 \item
 How big a virtual address range can each page directory now span?
 \item
-Because each page directory can no longer span the full 4-GB
+Because each page directory can no longer span the full 4-GiB
 virtual address range, PAE requires adding a third level to the top of
 the tree.  The newly added root node doesn't have as large as
 branching factor as you calculated in part~(a)
