@@ -30,7 +30,7 @@ memory.  Only afterward will I turn to the details of mechanisms and
 policies; you'll find the related discussions in Sections \ref{vm-reps} and \ref{vm-policies-section}.  The
 chapter concludes with the standard features: security issues in
 Section~\ref{vm-security-section}, then exercises, programming and
-exploration projects, and notes. 
+exploration projects, and notes.
 
 The essence of virtual memory is to decouple the addresses that
 running programs use to identify objects from the addresses that the
@@ -496,7 +496,7 @@ internal fragmentation, in that same chapter.)
 Because all modern general-purpose systems have virtual memory, these
 contiguous allocation difficulties are a non-issue for main memory.
 The operating system can allocate any available physical page frames
-to a process, independent of where they are located in memory. 
+to a process, independent of where they are located in memory.
 For example, the conundrum of
 Figure~\ref{scan-6-6} could be solved as shown in
 Figure~\ref{discontiguous}.
@@ -512,7 +512,7 @@ In a more realistic setting, it would be
 surprising for the pattern of physical memory allocation to display
 even this degree of contiguity.  However, the
 virtual addresses can be contiguous even if the physical addresses
-are scattered all over the memory. 
+are scattered all over the memory.
 
 \subsection{Sparse Address Spaces}
 
@@ -1350,63 +1350,22 @@ is invalid, as are pages 1024--2047.  You can explore this
 example further in Exercise~\ref{IA-32-page-table-exercise} and can
 consider a modified version of this page table format in Exercise~\ref{PAE-exercise}.
 \begin{figure}
-\centerline{\includegraphics{hail_f0613}}
-\iffalse
-\centerline{\begin{graph}(311,160)(-30,0)
-\graphlinecolour{0}
-\grapharrowlength{5}
-\fillednodesfalse
-\graphnodesize{20}
-\rectnode{pd0}[10,20](100,150)
-\rectnode{pd1}[10,20](110,150)
-\rectnode{pde}[30,20](130,150)
-\rectnode{pd1023}[10,20](150,150)
-\autonodetext{pd0}[w]{page directory}
-\autonodetext{pde}{$\cdots$}
-\rectnode{pt0.0}[10,20](50,80)
-\rectnode{pt0.1}[10,20](60,80)
-\rectnode{pt0.e}[30,20](80,80)
-\rectnode{pt0.1023}[10,20](100,80)
-\autonodetext{pt0.0}[w]{page table}
-\autonodetext{pt0.e}{$\cdots$}
-\diredge{pd0}{pt0.e}
-\textnode{x1}(110, 122){X}[\graphlinewidth{0}\graphlinecolour{1}]
-\textnode{x1n}(130, 105){\begin{tabular}{l}(no pages\\1024--2047)\end{tabular}}[\graphlinewidth{0}\graphlinecolour{1}]
-\diredge{pd1}{x1}
-\rectnode{pt1023.0}[10,20](150,80)
-\rectnode{pt1023.1}[10,20](160,80)
-\rectnode{pt1023.e}[40,20](185,80)
-\autonodetext{pt1023.e}{$\cdots$}
-\diredge{pd1023}{pt1023.e}
-\freetext(125,80){$\cdots$}
-\rectnode{p0.0}[60,20](0,10)
-\autonodetext{p0.0}{page 0}
-\diredge{pt0.0}{p0.0}
-\textnode{x0.1}(60, 42){\begin{tabular}{c}X\\(no page 1)\end{tabular}}[\graphlinewidth{0}\graphlinecolour{1}]
-\diredge{pt0.1}{x0.1}
-\rectnode{p0.1023}[60,20](80,10)
-\autonodetext{p0.1023}{page 1023}
-\diredge{pt0.1023}{p0.1023}
-\freetext(40,10){$\cdots$}
-\rectnode{p1023.0}[60,20](170,10)
-\autonodetext{p1023.0}{pg.~1047552}
-\diredge{pt1023.0}{p1023.0}
-\freetext(125,10){$\cdots$}
-\rectnode{p1023.1}[60,20](235,10)
-\autonodetext{p1023.1}{pg.~1047553}
-\diredge{pt1023.1}{p1023.1}
-\freetext(275,10){$\cdots$}
-\end{graph}}
-\fi
+\centerline{\includegraphics[width=.9\linewidth]{hail_f0613}}
 \caption{The IA-32 two-level page table has a page directory that can
   point to 1024 chunks of the page table, each of which can point to 1024 page
-  frames.  The leftmost pointer leading from the leftmost chunk of the
-  page table
-  points to the page frame holding page~0.  Each entry can also be
-  marked invalid, indicated by an X in this diagram. For example, the
-  second entry in the first chunk of the page table is invalid, showing that no
-  page frame holds page~1.  The same principle applies at the page
-  directory level; in this example, no page frames hold pages 1024--2047, so the second page directory entry is marked invalid.}
+  frames.  As in Fig. 6.11, entries (of page directory and page table) record
+  valid bits and address information.  For example, the leftmost entry
+  of the leftmost chunk of the page table points to the page frame
+  holding page~0, which is page frame~0; besides, page frame~42 holds
+  page 1023, while page frames 100 and 99 hold pages 1047552 and
+  1047553, respectively.
+  Each entry can also be marked invalid, indicated by a valid bit of 0
+  and an X in this diagram.
+  For example, the second entry in the first chunk of the page table
+  is invalid, showing that no page frame holds page~1.  The same
+  principle applies at the page directory level; in this example, no
+  page frames hold pages 1024--2047, so the second page directory
+  entry is marked invalid.}
 \label{IA-32-page-table}
 \end{figure}
 
@@ -1414,7 +1373,7 @@ The operating system on an IA-32 machine stores the physical base
 address of the page directory in a special register, where the
 hardware's page table walker can find it.  Suppose that at some later
 point, the processor generates a 32-bit virtual address and presents
-it to the MMU for translation.  
+it to the MMU for translation.
 Figure~\ref{scan-6-8} shows the core of the translation process,
 omitting the TLB and the validity checks.
 \begin{figure}
@@ -2597,8 +2556,12 @@ containing a page table entry for every page number.  Suppose that the size
 of each page table entry is only 4 bytes.  How large would each
 page table be?
 \item\label{IA-32-page-table-exercise}
-At the lower right of Figure~\ref{IA-32-page-table} on page~\pageref{IA-32-page-table} are page numbers
-1047552 and 1047553.  Explain how these page numbers were calculated.
+The rightmost arrow of Figure~\ref{IA-32-page-table} on
+page~\pageref{IA-32-page-table} covers page numbers
+1047552--1048575.  Explain how these page numbers were calculated.
+Afterwards, consider virtual address 4290777130.  To what page does it
+belong?  Based on the information of Figure~\ref{IA-32-page-table},
+can you tell where that address is currently located in RAM?
 \item\label{PAE-exercise}
 My discussion of IA-32 multilevel page tables is based on the
 original version of the architecture, which limited physical addresses
