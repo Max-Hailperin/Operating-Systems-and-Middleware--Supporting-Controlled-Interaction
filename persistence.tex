@@ -1744,6 +1744,7 @@ subtree pointers, it would still provide a substantial branching
 factor.  This observation provides the inspiration for the mechanism
 used to maintain B-trees as entries are inserted.
 
+For simplicity, assume the maximum number of keys per node is even.
 Each node is allowed to be anywhere between half full and totally
 full.
 This flexibility means one can easily insert into a node, so long as
@@ -2713,7 +2714,7 @@ the other showing what would happen if 10 were inserted instead of 16.
 Using Figure~\ref{B-plus-tree} on page~\pageref{B-plus-tree}, translate the following file block
 numbers into disk block numbers: 3, 9, 76, 251.
 \item\label{Bplus-tree-insertion-exercise}
-Insertion into a B-tree node that is full to its capacity of $N$
+Insertion into a full B-tree node with even capacity $N$
 always behaves the same way, whether the node is a leaf or not.  The
 node is split, with $N/2$ keys in each new node, and the median key
 inserted into the parent node.  The situation with B${}^+$-trees is
